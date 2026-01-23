@@ -1587,3 +1587,69 @@ body.moo-theme .nav__logo .logo-text {
 .moo-overlay {
     z-index: 10000;
 }
+
+/* Valentine Gallery Styles */
+.moo-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.moo-photo-card {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.8s ease;
+}
+
+.moo-photo-card.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.moo-photo {
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+}
+
+.moo-caption {
+    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+    color: #5d4037;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
+.moo-final-message {
+    margin-top: 4rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #d84315;
+    line-height: 1.4;
+    font-family: 'Comic Sans MS', cursive;
+}
+
+/* Make overlay scrollable for the gallery */
+.moo-overlay {
+    overflow-y: auto;
+    align-items: flex-start; /* Allow scrolling from top */
+    padding: 2rem 0;
+    /* Ensure scrollbar works */
+    -webkit-overflow-scrolling: touch;
+}
+
+.moo-content {
+    margin: auto; /* Center in scrollable area */
+    padding-bottom: 4rem; /* Space at bottom */
+}
+
+.moo-card {
+   /* Allow card to grow */
+   height: auto;
+   overflow: visible;
+}
