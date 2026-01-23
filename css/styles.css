@@ -486,6 +486,7 @@ textarea {
     margin-bottom: var(--spacing-xl);
 }
 
+
 .hero__buttons {
     display: flex;
     gap: var(--spacing-md);
@@ -543,6 +544,16 @@ textarea {
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+.hero__profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    /* Optional: adds a nice border ring */
+}
+
 
 /* Floating Elements */
 .hero__floating-elements {
@@ -702,11 +713,35 @@ textarea {
     font-size: var(--font-size-base);
     font-weight: 600;
     margin-bottom: var(--spacing-xs);
+    color: var(--color-text-primary);
+    /* Adapts to theme */
 }
+
+/* Hover effect moved to text below */
 
 .skill-card__text {
     font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
+    color: var(--color-text-primary);
+    /* Adapts to theme */
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+
+.skill-card:hover .skill-card__text {
+    /* Multi-color bright gradient to look "word by word" */
+    background: linear-gradient(90deg, #f472b6 0%, #a78bfa 50%, #2dd4bf 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #a78bfa;
+    /* Use scale to avoid layout jank/reflow */
+    transform: scale(1.05);
+    transform-origin: left center;
+    display: inline-block;
+    /* Required for transform */
+    width: 100%;
+    /* Ensure text wraps correctly */
+    filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.3));
 }
 
 /* ============================================
@@ -805,8 +840,15 @@ textarea {
 
 .project-card__description {
     font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
+    /* Brighter Purple Gradient */
+    background: linear-gradient(135deg, #a855f7 0%, #e879f9 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #a855f7;
+    /* Fallback */
     margin-bottom: var(--spacing-md);
+    font-weight: 500;
 }
 
 .project-card__tags {
@@ -1458,6 +1500,51 @@ body.moo-theme .nav__logo .logo-text {
     max-width: 500px;
 }
 
+/* Experience Section Specifics */
+.experience-header {
+    margin-bottom: 1rem;
+}
+
+.experience-company {
+    display: block;
+    font-weight: 500;
+    color: var(--color-primary);
+    margin-top: 0.2rem;
+}
+
+.experience-date {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-top: 0.2rem;
+}
+
+.experience-list {
+    list-style-type: none;
+    margin: 1rem 0;
+}
+
+.experience-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+}
+
+.experience-list li::before {
+    content: "•";
+    color: var(--color-accent-1);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    width: 1rem;
+}
+
+.project-card.experience-card {
+    height: auto;
+    /* Let it grow with content */
+}
+
 .moo-cow {
     width: 180px;
     margin-bottom: -40px;
@@ -1679,20 +1766,44 @@ body.moo-theme .nav__logo .logo-text {
 }
 
 /* Make overlay scrollable for the gallery */
+/* Make overlay scrollable for the gallery */
+/* Make overlay scrollable for the gallery */
+/* Make overlay scrollable for the gallery */
 .moo-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    /* STATIONERY BACKGROUND APPLIED DIRECTLY TO OVERLAY */
+    background-color: #fff9f0 !important;
+    background-image: url('../assets/images/pattern.png') !important;
+    background-size: 400px;
+    background-blend-mode: normal;
+    z-index: 10000;
+
+    /* SCROLL FIX: Use block display + margin auto for content */
+    display: block;
     overflow-y: auto;
-    align-items: flex-start;
-    /* Allow scrolling from top */
-    padding: 2rem 0;
-    /* Ensure scrollbar works */
     -webkit-overflow-scrolling: touch;
+
+    transition: all 0.5s ease;
+    opacity: 0;
+    pointer-events: none;
+
+    /* Scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) var(--color-background);
 }
 
 .moo-content {
-    margin: auto;
-    /* Center in scrollable area */
-    padding-bottom: 4rem;
-    /* Space at bottom */
+    /* Safe margins: 10vh top ensures it's never clipped at top */
+    /* auto sides ensures horizontal centering */
+    margin: 10vh auto 4rem;
+
+    width: 90%;
+    max-width: 500px;
+    padding-bottom: 2rem;
+}
 }
 
 .moo-card {
