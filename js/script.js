@@ -221,6 +221,43 @@ window.checkPassword = function () {
 window.celebrate = function () {
     window.nextStep('success');
     startConfetti();
+
+    // Initialize fade-in observer for the new gallery elements
+    setTimeout(() => {
+        const fadeElements = document.querySelectorAll('.fade-in-scroll');
+        const overlay = document.getElementById('moo-game'); // The scroll container
+
+        if (!overlay) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Only trigger once
+                }
+            });
+        }, {
+            root: overlay, // Monitor scrolling within the overlay
+            threshold: 0.05 // Trigger as soon as 5% comes in
+        });
+
+        fadeElements.forEach(el => observer.observe(el));
+
+        // Fallback: If observer doesn't trigger after 3s (e.g. no scroll needed), force show
+        setTimeout(() => {
+            fadeElements.forEach(el => el.classList.add('visible'));
+        }, 3000);
+
+        // Debug images
+        document.querySelectorAll('.moo-photo').forEach(img => {
+            img.onerror = function () {
+                console.log('Image failed to load:', this.src);
+                this.src = 'assets/images/cow.png'; // Fallback to cow if image fails
+                this.alt = 'Image failed to load';
+                this.style.border = '2px solid red';
+            };
+        });
+    }, 100);
 };
 
 document.addEventListener('DOMContentLoaded', () => {

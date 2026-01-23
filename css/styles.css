@@ -1394,23 +1394,33 @@ body.moo-theme .nav__logo .logo-text {
         transform: translateY(-10px) scale(1.1);
     }
 }
+
 /* ============================================
    Moo Theme (Highland Cow Valentine)
    ============================================ */
 body.moo-theme {
-    --color-bg-primary: #fff9f0; /* Creamy white */
-    --color-bg-secondary: #fff0e5; /* Soft peach */
-    --color-bg-tertiary: #ffe4d6; /* Darker peach */
-    --color-text-primary: #5d4037; /* Warm brown */
-    --color-text-secondary: #795548; /* Lighter brown */
-    --color-accent-1: #ff8a80; /* Soft red/pink */
-    --color-accent-2: #ffcc80; /* Soft orange */
-    --color-accent-3: #8d6e63; /* Brown accent */
+    --color-bg-primary: #fff9f0;
+    /* Creamy white */
+    --color-bg-secondary: #fff0e5;
+    /* Soft peach */
+    --color-bg-tertiary: #ffe4d6;
+    /* Darker peach */
+    --color-text-primary: #5d4037;
+    /* Warm brown */
+    --color-text-secondary: #795548;
+    /* Lighter brown */
+    --color-accent-1: #ff8a80;
+    /* Soft red/pink */
+    --color-accent-2: #ffcc80;
+    /* Soft orange */
+    --color-accent-3: #8d6e63;
+    /* Brown accent */
     --gradient-primary: linear-gradient(135deg, #ff8a80 0%, #ffcc80 100%);
-    
+
     background-image: url('../assets/images/pattern.png');
     background-size: 400px;
-    background-blend-mode: normal; /* Removed multiply to see pattern better */
+    background-blend-mode: normal;
+    /* Removed multiply to see pattern better */
 }
 
 body.moo-theme .nav__logo .logo-text {
@@ -1423,8 +1433,10 @@ body.moo-theme .nav__logo .logo-text {
     position: fixed;
     inset: 0;
     z-index: 2000;
-    background: rgba(93, 64, 55, 0.7); /* Slightly reduced background opacity */
-    backdrop-filter: blur(4px); /* Reduced blur */
+    background: rgba(93, 64, 55, 0.7);
+    /* Slightly reduced background opacity */
+    backdrop-filter: blur(4px);
+    /* Reduced blur */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1449,28 +1461,43 @@ body.moo-theme .nav__logo .logo-text {
 .moo-cow {
     width: 180px;
     margin-bottom: -40px;
-    z-index: 2;
-    /* Blend multiply to remove white/light pixels if any remain, and drop shadow */
-    /* Removed mix-blend-mode: multiply since background is now solid cream matching the card */
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    z-index: 9999 !important;
+    /* Force to top */
+    opacity: 1 !important;
+    /* Ensure 0 transparency */
+    mix-blend-mode: normal !important;
+    /* No blending */
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
     animation: cowFloat 3s ease-in-out infinite;
+    transform: translateZ(0);
+    /* Force new stacking context */
+    border-radius: 20px;
+    /* Slightly rounded corners */
 }
 
 @keyframes cowFloat {
-    0%, 100% { transform: translateY(0) rotate(-2deg); }
-    50% { transform: translateY(-10px) rotate(2deg); }
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-2deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(2deg);
+    }
 }
 
 .moo-card {
     background: #fff9f0;
     padding: 3rem 2rem 2rem;
     border-radius: 24px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     text-align: center;
     width: 100%;
     position: relative;
     border: 4px solid #5d4037;
-    z-index: 1; /* Ensure card is above cow's mix-blend backdrop if needed */
+    z-index: 1;
+    /* Ensure card is above cow's mix-blend backdrop if needed */
 }
 
 .moo-close {
@@ -1495,12 +1522,20 @@ body.moo-theme .nav__logo .logo-text {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .moo-title {
-    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Playful font fallbacks */
+    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+    /* Playful font fallbacks */
     font-size: 2rem;
     color: #5d4037;
     margin-bottom: 1rem;
@@ -1520,13 +1555,15 @@ body.moo-theme .nav__logo .logo-text {
 }
 
 /* Updated button styles to look uniform initially */
-.btn--moo, .btn--moo-outline {
+.btn--moo,
+.btn--moo-outline {
     background: #fff9f0;
     color: #5d4037;
     border: 2px solid #5d4037;
 }
 
-.btn--moo:hover, .btn--moo-outline:hover {
+.btn--moo:hover,
+.btn--moo-outline:hover {
     background: #5d4037;
     color: #fff9f0;
     transform: translateY(-2px);
@@ -1577,10 +1614,12 @@ body.moo-theme .nav__logo .logo-text {
     width: 180px;
     margin-bottom: -40px;
     position: relative;
-    z-index: 9999 !important; /* Force to top */
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+    z-index: 9999 !important;
+    /* Force to top */
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
     animation: cowFloat 3s ease-in-out infinite;
-    pointer-events: none; /* Let clicks pass through if needed, though card handles them */
+    pointer-events: none;
+    /* Let clicks pass through if needed, though card handles them */
 }
 
 /* Ensure overlay is extremely high z-index */
@@ -1601,7 +1640,7 @@ body.moo-theme .nav__logo .logo-text {
     background: #fff;
     padding: 1rem;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transform: translateY(30px);
     opacity: 0;
     transition: all 0.8s ease;
@@ -1628,28 +1667,36 @@ body.moo-theme .nav__logo .logo-text {
 .moo-final-message {
     margin-top: 4rem;
     font-size: 2rem;
-    font-weight: bold;
-    color: #d84315;
+    font-weight: 800;
+    /* Bolder for modern look */
+    color: #000;
+    /* Black by default */
     line-height: 1.4;
-    font-family: 'Comic Sans MS', cursive;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    /* Modern stack */
+    transition: all 0.3s ease;
+    cursor: default;
 }
 
 /* Make overlay scrollable for the gallery */
 .moo-overlay {
     overflow-y: auto;
-    align-items: flex-start; /* Allow scrolling from top */
+    align-items: flex-start;
+    /* Allow scrolling from top */
     padding: 2rem 0;
     /* Ensure scrollbar works */
     -webkit-overflow-scrolling: touch;
 }
 
 .moo-content {
-    margin: auto; /* Center in scrollable area */
-    padding-bottom: 4rem; /* Space at bottom */
+    margin: auto;
+    /* Center in scrollable area */
+    padding-bottom: 4rem;
+    /* Space at bottom */
 }
 
 .moo-card {
-   /* Allow card to grow */
-   height: auto;
-   overflow: visible;
+    /* Allow card to grow */
+    height: auto;
+    overflow: visible;
 }
