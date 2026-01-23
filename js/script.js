@@ -190,3 +190,123 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(styleSheet);
 });
+
+/* ============================================
+   Moo Game Logic
+   ============================================ */
+// State for the game
+window.nextStep = function(step) {
+    // Hide all steps
+    document.querySelectorAll('.game-step').forEach(el => el.classList.remove('active'));
+    
+    // Show requested step
+    const nextEl = document.getElementById('game-step-' + step);
+    if (nextEl) {
+        nextEl.classList.add('active');
+    }
+};
+
+window.celebrate = function() {
+    window.nextStep('success');
+    startConfetti();
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mooTrigger = document.getElementById('moo-trigger');
+    const mooGame = document.getElementById('moo-game');
+    const mooClose = document.getElementById('moo-close');
+    
+    if (mooTrigger && mooGame) {
+        mooTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Toggle Theme
+            document.body.classList.add('moo-theme');
+            
+            // Show Overlay
+            mooGame.classList.remove('hidden');
+            
+            // Reset game to step 0
+            window.nextStep(0);
+        });
+        
+        mooClose.addEventListener('click', () => {
+            mooGame.classList.add('hidden');
+            document.body.classList.remove('moo-theme');
+            stopConfetti();
+        });
+    }
+});
+
+/* ============================================
+   Simple Confetti Implementation
+   ============================================ */
+let confettiActive = false;
+let animationId = null;
+
+function startConfetti() {
+    if (confettiActive) return;
+    confettiActive = true;
+    
+    const canvas = document.getElementById('confetti-canvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const pieces = [];
+    const colors = ['#ff8a80', '#ffcc80', '#8d6e63', '#ffffff', '#e57373'];
+    
+    for (let i = 0; i < 200; i++) {
+        pieces.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height - canvas.height,
+            rotation: Math.random() * 360,
+            speed: 2 + Math.random() * 4,
+            width: 8 + Math.random() * 8,
+            height: 8 + Math.random() * 8,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            sway: Math.random() * 2 - 1
+        });
+    }
+    
+    function update() {
+        if (!confettiActive) return;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        pieces.forEach(p => {
+            p.y += p.speed;
+            p.x += Math.sin(p.y * 0.01) + p.sway;
+            p.rotation += 2;
+            
+            if (p.y > canvas.height) {
+                p.y = -20;
+                p.x = Math.random() * canvas.width;
+            }
+            
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rotation * Math.PI / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.width/2, -p.height/2, p.width, p.height);
+            ctx.restore();
+        });
+        
+        animationId = requestAnimationFrame(update);
+    }
+    
+    update();
+}
+
+function stopConfetti() {
+    confettiActive = false;
+    if (animationId) cancelAnimationFrame(animationId);
+    
+    const canvas = document.getElementById('confetti-canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+}
