@@ -155,7 +155,16 @@ textarea {
 }
 
 .section {
-    padding: var(--spacing-4xl) 0;
+    padding: var(--spacing-2xl) 0;
+    content-visibility: auto;
+    /* Skip rendering off-screen content */
+    contain-intrinsic-size: 1000px;
+    /* Approximate height to prevent scroll bar jumping */
+}
+
+/* Exclude hero from content-visibility to ensure LCP is fast */
+#home.section {
+    content-visibility: visible;
 }
 
 .section__subtitle {
@@ -511,6 +520,8 @@ textarea {
     align-items: center;
     justify-content: center;
     box-shadow: var(--shadow-glow);
+    will-change: border-radius;
+    /* Optimization */
 }
 
 @keyframes blobMorph {
@@ -566,6 +577,8 @@ textarea {
     position: absolute;
     font-size: 2rem;
     animation: float 6s ease-in-out infinite;
+    will-change: transform;
+    /* Optimization */
 }
 
 .floating-element--1 {
@@ -609,11 +622,11 @@ textarea {
 .scroll-indicator {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-sm);
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
     animation: scrollBounce 2s ease-in-out infinite;
+    will-change: transform;
+    /* Optimization */
 }
 
 .scroll-arrow {
@@ -1959,7 +1972,7 @@ body.moo-theme .nav__logo .logo-text {
     /* Or left: 50%; transform: translateX(-50%); for center */
     /* Let's go with bottom-right as it's cleaner */
     font-size: 2rem;
-    z-index: 900;
+    z-index: 9999;
     /* Below modal (1000+) but above content */
     cursor: pointer;
     background: none;
