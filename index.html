@@ -392,7 +392,7 @@
                     <p class="moo-text">What is my favorite color?</p>
                     <div class="moo-options">
                         <button class="btn btn--moo" onclick="nextStep(2)">Purple</button>
-                        <button class="btn btn--moo-outline" onclick="alert('Try again! 🐮')">Pink</button>
+                        <button class="btn btn--moo-outline" onclick="showMooModal('Try again! 🐮')">Pink</button>
                     </div>
                 </div>
 
@@ -400,27 +400,41 @@
                     <h2 class="moo-title">Question 2</h2>
                     <p class="moo-text">What is our dream destination?</p>
                     <div class="moo-options">
-                        <button class="btn btn--moo-outline" onclick="alert('Too chaotic! 🐮')">Visiting NYC &
+                        <button class="btn btn--moo-outline" onclick="showMooModal('Too chaotic! 🐮')">Visiting NYC &
                             Chill</button>
                         <button class="btn btn--moo" onclick="nextStep(3)">Northern Lights in Norway</button>
                     </div>
                 </div>
 
+                <!-- New Question: Capital of USA -->
                 <div id="game-step-3" class="game-step">
                     <h2 class="moo-title">Question 3</h2>
-                    <p class="moo-text">What are we?</p>
-                    <div class="moo-options">
-                        <button class="btn btn--moo" onclick="nextStep(4)">Otters for life</button>
-                        <button class="btn btn--moo-outline" onclick="alert('No way! 🐮')">Non Chalant Peeps</button>
+                    <p class="moo-text">What is the capital of the USA? (hehehe)</p>
+                    <div class="moo-input-group">
+                        <input type="text" id="moo-capital-input" class="moo-input" placeholder="Enter city...">
+                        <button class="btn btn--moo" onclick="checkCapital()">Submit</button>
                     </div>
                 </div>
 
+                <!-- New Question: Who is taller? -->
                 <div id="game-step-4" class="game-step">
-                    <h2 class="moo-title">Final Question...</h2>
-                    <p class="moo-text">Will you be my Valentine? 🌹</p>
+                    <h2 class="moo-title">Question 4</h2>
+                    <p class="moo-text">Who is taller? 📏</p>
                     <div class="moo-options">
-                        <button class="btn btn--moo" onclick="celebrate()">Yes</button>
-                        <button class="btn btn--moo-blue" onclick="celebrate()">Yes but in blue</button>
+                        <!-- Correct answer: Vigu -->
+                        <button class="btn btn--moo" onclick="nextStep(5)">Vigu</button>
+                        <!-- Incorrect answer: Moo -->
+                        <button class="btn btn--moo-outline" onclick="showMooModal('I wish! 🐮')">Moo</button>
+                    </div>
+                </div>
+
+                <div id="game-step-5" class="game-step">
+                    <h2 class="moo-title">Question 5</h2>
+                    <p class="moo-text">What are we?</p>
+                    <div class="moo-options">
+                        <button class="btn btn--moo" onclick="celebrate()">Otters for life</button>
+                        <button class="btn btn--moo-outline" onclick="showMooModal('No way! 🐮')">Non Chalant
+                            Peeps</button>
                     </div>
                 </div>
 
@@ -459,6 +473,36 @@
                         <span>with</span> <span>my</span> <span>amazing</span> <span>superwoman.</span><br>
                         <span>I</span> <span>love</span> <span>you</span> <span>MOOJEEB</span> <span>❤️</span>
                     </p>
+
+                    <!-- Proposal at Bottom -->
+                    <div class="moo-proposal fade-in-scroll" style="margin-top: 4rem; padding-bottom: 2rem;">
+                        <h2 class="moo-title">One last thing...</h2>
+                        <p class="moo-text">Will you be my Valentine? 🌹</p>
+                        <div class="moo-options">
+                            <button class="btn btn--moo" onclick="finalProposal()">Yes</button>
+                            <button class="btn btn--moo-blue" onclick="finalProposal()">Yes but in blue</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Final Celebration Step (Hidden until proposal accepted) -->
+                <div id="game-step-celebration" class="game-step">
+                    <h2 class="moo-title" style="font-size: 2.5rem; margin-bottom: 0.5rem;">YAYYY!!! 🎉</h2>
+                    <p class="moo-text" style="font-size: 1.5rem; color: #d84315;">Best Otters Forever! ❤️</p>
+                    <div class="otter-celebration">
+                        <img src="assets/images/otters.png" alt="Otters Cuddling" class="otter-image">
+                    </div>
+                    <div class="floating-hearts">
+                        <span>🦦</span><span>💖</span><span>🦦</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Modal -->
+            <div id="moo-modal" class="moo-modal-overlay hidden">
+                <div class="moo-modal-box">
+                    <button class="moo-modal-close" onclick="closeMooModal()">×</button>
+                    <p id="moo-modal-text"></p>
                 </div>
             </div>
         </div>

@@ -206,6 +206,23 @@ window.nextStep = function (step) {
     }
 };
 
+// Custom Modal Logic
+window.showMooModal = function (message) {
+    const modal = document.getElementById('moo-modal');
+    const text = document.getElementById('moo-modal-text');
+    if (modal && text) {
+        text.textContent = message;
+        modal.classList.remove('hidden');
+    }
+};
+
+window.closeMooModal = function () {
+    const modal = document.getElementById('moo-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+};
+
 window.checkPassword = function () {
     const input = document.getElementById('moo-password');
     const password = input.value.trim().toLowerCase();
@@ -213,19 +230,31 @@ window.checkPassword = function () {
     if (password === 'cutose') {
         window.nextStep(0); // Proceed to "Let's Go!"
     } else {
-        alert("access denied... only Moos allowed! 🐮");
+        window.showMooModal("Access denied... only Moos allowed! 🐮");
         input.value = '';
     }
 };
 
+window.checkCapital = function () {
+    const input = document.getElementById('moo-capital-input');
+    const answer = input.value.trim().toLowerCase();
+
+    if (answer === 'washington' || answer === 'washington dc' || answer === 'washington d.c.') {
+        window.nextStep(4);
+    } else {
+        window.showMooModal("Hehehe... try again! 🇺🇸");
+        input.value = '';
+    }
+};
+
+// Intermediate celebration (unlocks gallery)
 window.celebrate = function () {
     window.nextStep('success');
-    startConfetti();
 
     // Initialize fade-in observer for the new gallery elements
     setTimeout(() => {
         const fadeElements = document.querySelectorAll('.fade-in-scroll');
-        const overlay = document.getElementById('moo-game'); // The scroll container
+        const overlay = document.getElementById('moo-game');
 
         if (!overlay) return;
 
@@ -233,17 +262,17 @@ window.celebrate = function () {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    observer.unobserve(entry.target); // Only trigger once
+                    observer.unobserve(entry.target);
                 }
             });
         }, {
-            root: overlay, // Monitor scrolling within the overlay
-            threshold: 0.05 // Trigger as soon as 5% comes in
+            root: overlay,
+            threshold: 0.05
         });
 
         fadeElements.forEach(el => observer.observe(el));
 
-        // Fallback: If observer doesn't trigger after 3s (e.g. no scroll needed), force show
+        // Timer fallback
         setTimeout(() => {
             fadeElements.forEach(el => el.classList.add('visible'));
         }, 3000);
@@ -251,36 +280,59 @@ window.celebrate = function () {
         // Debug images
         document.querySelectorAll('.moo-photo').forEach(img => {
             img.onerror = function () {
-                console.log('Image failed to load:', this.src);
-                this.src = 'assets/images/cow.png'; // Fallback to cow if image fails
-                this.alt = 'Image failed to load';
+                this.src = 'assets/images/cow.png';
                 this.style.border = '2px solid red';
             };
         });
     }, 100);
 };
 
+// Final Proposal Action (Bottom of page)
+// Final Proposal Action (Bottom of page)
+window.finalProposal = function () {
+    startConfetti();
+    launchFireworks(); // Fire the new fireworks function
+
+    // Switch to the dedicated celebration step
+    window.nextStep('celebration');
+};
+
+// Fireworks Logic (Simple Canvas extension)
+function launchFireworks() {
+    // We reuse the confetti canvas/logic but add "explosion" visuals
+    // For simplicity, we just trigger massive confetti bursts rapidly to simulate fireworks
+    // since implementing a full physics engine might be overkill/error-prone in one step.
+    let burstCount = 0;
+    const interval = setInterval(() => {
+        startConfetti(); // Ensure it's running
+        burstCount++;
+        if (burstCount > 5) clearInterval(interval);
+    }, 300);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const mooTrigger = document.getElementById('moo-trigger');
     const mooGame = document.getElementById('moo-game');
     const mooClose = document.getElementById('moo-close');
     const passwordInput = document.getElementById('moo-password');
+    const capitalInput = document.getElementById('moo-capital-input');
 
     if (mooTrigger && mooGame) {
         mooTrigger.addEventListener('click', (e) => {
             e.preventDefault();
-
             // Toggle Theme
             document.body.classList.add('moo-theme');
-
             // Show Overlay
             mooGame.classList.remove('hidden');
-
             // Reset game to password step
             window.nextStep('password');
-
-            // Clear password
+            // Clear inputs
             if (passwordInput) passwordInput.value = '';
+            if (capitalInput) capitalInput.value = '';
+            // Hide otters
+            document.getElementById('otter-celebration').classList.add('hidden');
+            document.querySelectorAll('.game-step').forEach(el => el.classList.remove('active'));
+            document.getElementById('game-step-password').classList.add('active'); // Explicit active
         });
 
         mooClose.addEventListener('click', () => {
@@ -289,12 +341,15 @@ document.addEventListener('DOMContentLoaded', () => {
             stopConfetti();
         });
 
-        // Allow Enter key to submit password
+        // Allow Enter key
         if (passwordInput) {
             passwordInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    window.checkPassword();
-                }
+                if (e.key === 'Enter') window.checkPassword();
+            });
+        }
+        if (capitalInput) {
+            capitalInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') window.checkCapital();
             });
         }
     }
