@@ -371,7 +371,17 @@
             <div class="moo-card">
                 <button id="moo-close" class="moo-close" aria-label="Close game">×</button>
 
-                <div id="game-step-0" class="game-step active">
+                <div id="game-step-password" class="game-step active">
+                    <h2 class="moo-title">Secret Access 🔒</h2>
+                    <p class="moo-text">What is Vigu's favourite nickname for you BESIDES Moo?<br><span
+                            style="font-size: 0.9em; opacity: 0.8;">(Hint: It ends in ose 😉)</span></p>
+                    <div class="moo-input-group">
+                        <input type="text" id="moo-password" class="moo-input" placeholder="Enter nickname...">
+                        <button class="btn btn--moo" onclick="checkPassword()">Unlock</button>
+                    </div>
+                </div>
+
+                <div id="game-step-0" class="game-step">
                     <h2 class="moo-title">Moo! 🐮</h2>
                     <p class="moo-text">You've found the secret cow level! Ready for a little challenge?</p>
                     <button class="btn btn--moo" onclick="nextStep(1)">Let's Go!</button>
@@ -379,34 +389,44 @@
 
                 <div id="game-step-1" class="game-step">
                     <h2 class="moo-title">Question 1</h2>
-                    <p class="moo-text">What is your favorite food? (Hint: I should know this)</p>
+                    <p class="moo-text">What is my favorite color?</p>
                     <div class="moo-options">
-                        <button class="btn btn--moo-outline" onclick="nextStep(2)">Sushi</button>
-                        <button class="btn btn--moo-outline" onclick="nextStep(2)">Pizza</button>
+                        <button class="btn btn--moo" onclick="nextStep(2)">Purple</button>
+                        <button class="btn btn--moo-outline" onclick="alert('Try again! 🐮')">Pink</button>
                     </div>
                 </div>
 
                 <div id="game-step-2" class="game-step">
                     <h2 class="moo-title">Question 2</h2>
-                    <p class="moo-text">Where is our dream vacation destination?</p>
+                    <p class="moo-text">What is our dream destination?</p>
                     <div class="moo-options">
-                        <button class="btn btn--moo-outline" onclick="nextStep(3)">Japan</button>
-                        <button class="btn btn--moo-outline" onclick="nextStep(3)">Iceland</button>
+                        <button class="btn btn--moo-outline" onclick="alert('Too chaotic! 🐮')">Visiting NYC &
+                            Chill</button>
+                        <button class="btn btn--moo" onclick="nextStep(3)">Northern Lights in Norway</button>
                     </div>
                 </div>
 
                 <div id="game-step-3" class="game-step">
+                    <h2 class="moo-title">Question 3</h2>
+                    <p class="moo-text">What are we?</p>
+                    <div class="moo-options">
+                        <button class="btn btn--moo" onclick="nextStep(4)">Otters for life</button>
+                        <button class="btn btn--moo-outline" onclick="alert('No way! 🐮')">Non Chalant Peeps</button>
+                    </div>
+                </div>
+
+                <div id="game-step-4" class="game-step">
                     <h2 class="moo-title">Final Question...</h2>
                     <p class="moo-text">Will you be my Valentine? 🌹</p>
                     <div class="moo-options">
-                        <button class="btn btn--moo" onclick="celebrate()">Yes!</button>
-                        <button class="btn btn--moo-outline" onclick="alert('Try again! 🐮')">No</button>
+                        <button class="btn btn--moo" onclick="celebrate()">Yes</button>
+                        <button class="btn btn--moo-blue" onclick="celebrate()">Yes but in blue</button>
                     </div>
                 </div>
 
                 <div id="game-step-success" class="game-step">
-                    <h2 class="moo-title">Yay! 🎉</h2>
-                    <p class="moo-text">Happy Valentine's Day! ❤️</p>
+                    <h2 class="moo-title">Yay!! You COOKED! 🍳</h2>
+                    <p class="moo-text">I love you my Moo ❤️</p>
                     <div class="floating-hearts">
                         <span>❤️</span><span>💖</span><span>🐮</span>
                     </div>

@@ -9,26 +9,26 @@
     --color-text-primary: #1a1a2e;
     --color-text-secondary: #4a4a68;
     --color-text-muted: #8888a0;
-    
+
     /* Accent Colors */
     --color-accent-1: #6c5ce7;
     --color-accent-2: #a29bfe;
     --color-accent-3: #fd79a8;
     --gradient-primary: linear-gradient(135deg, var(--color-accent-1) 0%, var(--color-accent-3) 100%);
     --gradient-text: linear-gradient(135deg, var(--color-accent-1), var(--color-accent-3), var(--color-accent-2));
-    
+
     /* Surfaces */
     --color-card-bg: rgba(255, 255, 255, 0.8);
     --color-card-border: rgba(0, 0, 0, 0.05);
     --color-glass-bg: rgba(255, 255, 255, 0.25);
     --color-glass-border: rgba(255, 255, 255, 0.3);
-    
+
     /* Shadows */
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
     --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
     --shadow-glow: 0 0 40px rgba(108, 92, 231, 0.15);
-    
+
     /* Typography */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-size-xs: 0.75rem;
@@ -41,7 +41,7 @@
     --font-size-4xl: 2.5rem;
     --font-size-5xl: 3.5rem;
     --font-size-6xl: 4.5rem;
-    
+
     /* Spacing */
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
@@ -51,16 +51,16 @@
     --spacing-2xl: 3rem;
     --spacing-3xl: 4rem;
     --spacing-4xl: 6rem;
-    
+
     /* Layout */
     --container-width: 1200px;
     --header-height: 80px;
-    
+
     /* Transitions */
     --transition-fast: 150ms ease;
     --transition-base: 250ms ease;
     --transition-slow: 400ms ease;
-    
+
     /* Border Radius */
     --radius-sm: 8px;
     --radius-md: 12px;
@@ -77,12 +77,12 @@
     --color-text-primary: #ffffff;
     --color-text-secondary: #b8b8d0;
     --color-text-muted: #6868a0;
-    
+
     --color-card-bg: rgba(26, 26, 46, 0.8);
     --color-card-border: rgba(255, 255, 255, 0.05);
     --color-glass-bg: rgba(26, 26, 46, 0.6);
     --color-glass-border: rgba(255, 255, 255, 0.1);
-    
+
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
     --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.4);
@@ -92,7 +92,9 @@
 /* ============================================
    CSS Reset & Base Styles
    ============================================ */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -136,7 +138,8 @@ button {
     background: none;
 }
 
-input, textarea {
+input,
+textarea {
     font-family: inherit;
     font-size: inherit;
 }
@@ -182,8 +185,15 @@ input, textarea {
 }
 
 @keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 /* ============================================
@@ -503,8 +513,15 @@ input, textarea {
 }
 
 @keyframes blobMorph {
-    0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-    50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+
+    0%,
+    100% {
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    }
+
+    50% {
+        border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    }
 }
 
 .hero__avatar {
@@ -559,8 +576,15 @@ input, textarea {
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(10deg); }
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(10deg);
+    }
 }
 
 /* Scroll Indicator */
@@ -590,8 +614,15 @@ input, textarea {
 }
 
 @keyframes scrollBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(10px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(10px);
+    }
 }
 
 /* ============================================
@@ -920,8 +951,8 @@ input, textarea {
     transition: all var(--transition-base);
 }
 
-.form__input:focus + .form__label,
-.form__input:not(:placeholder-shown) + .form__label {
+.form__input:focus+.form__label,
+.form__input:not(:placeholder-shown)+.form__label {
     top: var(--spacing-md);
     font-size: var(--font-size-xs);
     color: var(--color-accent-1);
@@ -932,7 +963,7 @@ input, textarea {
     resize: vertical;
 }
 
-.form__textarea + .form__label {
+.form__textarea+.form__label {
     top: var(--spacing-xl);
     transform: none;
 }
@@ -1008,12 +1039,12 @@ input, textarea {
     .hero__title {
         font-size: var(--font-size-5xl);
     }
-    
+
     .hero__blob {
         width: 350px;
         height: 350px;
     }
-    
+
     .hero__avatar {
         width: 280px;
         height: 280px;
@@ -1036,74 +1067,74 @@ input, textarea {
         visibility: hidden;
         transition: all var(--transition-base);
     }
-    
+
     .nav__list.active {
         transform: translateY(0);
         opacity: 1;
         visibility: visible;
     }
-    
+
     .nav__toggle {
         display: flex;
     }
-    
+
     .hero__container {
         grid-template-columns: 1fr;
         text-align: center;
     }
-    
+
     .hero__content {
         order: 2;
     }
-    
+
     .hero__image {
         order: 1;
     }
-    
+
     .hero__title {
         font-size: var(--font-size-4xl);
     }
-    
+
     .hero__description {
         margin-left: auto;
         margin-right: auto;
     }
-    
+
     .hero__buttons {
         justify-content: center;
     }
-    
+
     .hero__blob {
         width: 280px;
         height: 280px;
     }
-    
+
     .hero__avatar {
         width: 220px;
         height: 220px;
     }
-    
+
     .about__content,
     .contact__content {
         grid-template-columns: 1fr;
     }
-    
+
     .about__stats {
         justify-content: center;
     }
-    
+
     .skills-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .section__title {
         font-size: var(--font-size-3xl);
     }
-    
+
     .projects__grid {
         grid-template-columns: 1fr;
     }
-    
+
     .footer__bottom {
         flex-direction: column;
         gap: var(--spacing-md);
@@ -1114,25 +1145,25 @@ input, textarea {
     .hero__title {
         font-size: var(--font-size-3xl);
     }
-    
+
     .hero__subtitle {
         font-size: var(--font-size-lg);
     }
-    
+
     .hero__blob {
         width: 220px;
         height: 220px;
     }
-    
+
     .hero__avatar {
         width: 180px;
         height: 180px;
     }
-    
+
     .stat__number {
         font-size: var(--font-size-3xl);
     }
-    
+
     .btn {
         padding: var(--spacing-md) var(--spacing-lg);
         font-size: var(--font-size-sm);
@@ -1143,16 +1174,24 @@ input, textarea {
    Moo Theme (Highland Cow Valentine)
    ============================================ */
 body.moo-theme {
-    --color-bg-primary: #fff9f0; /* Creamy white */
-    --color-bg-secondary: #fff0e5; /* Soft peach */
-    --color-bg-tertiary: #ffe4d6; /* Darker peach */
-    --color-text-primary: #5d4037; /* Warm brown */
-    --color-text-secondary: #795548; /* Lighter brown */
-    --color-accent-1: #ff8a80; /* Soft red/pink */
-    --color-accent-2: #ffcc80; /* Soft orange */
-    --color-accent-3: #8d6e63; /* Brown accent */
+    --color-bg-primary: #fff9f0;
+    /* Creamy white */
+    --color-bg-secondary: #fff0e5;
+    /* Soft peach */
+    --color-bg-tertiary: #ffe4d6;
+    /* Darker peach */
+    --color-text-primary: #5d4037;
+    /* Warm brown */
+    --color-text-secondary: #795548;
+    /* Lighter brown */
+    --color-accent-1: #ff8a80;
+    /* Soft red/pink */
+    --color-accent-2: #ffcc80;
+    /* Soft orange */
+    --color-accent-3: #8d6e63;
+    /* Brown accent */
     --gradient-primary: linear-gradient(135deg, #ff8a80 0%, #ffcc80 100%);
-    
+
     background-image: url('../assets/images/pattern.png');
     background-size: 400px;
     background-blend-mode: multiply;
@@ -1195,7 +1234,225 @@ body.moo-theme .nav__logo .logo-text {
     width: 180px;
     margin-bottom: -40px;
     z-index: 2;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    /* Blend multiply to remove white/light pixels if any remain, and drop shadow */
+    mix-blend-mode: multiply;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    animation: cowFloat 3s ease-in-out infinite;
+}
+
+@keyframes cowFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-2deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(2deg);
+    }
+}
+
+.moo-card {
+    background: #fff9f0;
+    padding: 3rem 2rem 2rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 100%;
+    position: relative;
+    border: 4px solid #5d4037;
+    z-index: 1;
+    /* Ensure card is above cow's mix-blend backdrop if needed */
+}
+
+.moo-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2rem;
+    color: #8d6e63;
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.game-step {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.game-step.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.moo-title {
+    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+    /* Playful font fallbacks */
+    font-size: 2rem;
+    color: #5d4037;
+    margin-bottom: 1rem;
+}
+
+.moo-text {
+    font-size: 1.1rem;
+    color: #795548;
+    margin-bottom: 2rem;
+}
+
+.moo-options {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn--moo {
+    background: #5d4037;
+    color: #fff9f0;
+    border: 2px solid #5d4037;
+}
+
+.btn--moo:hover {
+    background: #795548;
+    transform: translateY(-2px);
+}
+
+.btn--moo-outline {
+    background: transparent;
+    color: #5d4037;
+    border: 2px solid #5d4037;
+}
+
+.btn--moo-outline:hover {
+    background: #5d4037;
+    color: #fff9f0;
+}
+
+.btn--moo-blue {
+    background: #3498db;
+    color: #fff;
+    border: 2px solid #3498db;
+    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+}
+
+.btn--moo-blue:hover {
+    background: #2980b9;
+    border-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Confetti Canvas */
+#confetti-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Floating Hearts */
+.floating-hearts {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 2.5rem;
+    margin-top: 1rem;
+}
+
+.floating-hearts span {
+    animation: heartFloat 2s ease-in-out infinite;
+}
+
+.floating-hearts span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.floating-hearts span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes heartFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-10px) scale(1.1);
+    }
+}
+/* ============================================
+   Moo Theme (Highland Cow Valentine)
+   ============================================ */
+body.moo-theme {
+    --color-bg-primary: #fff9f0; /* Creamy white */
+    --color-bg-secondary: #fff0e5; /* Soft peach */
+    --color-bg-tertiary: #ffe4d6; /* Darker peach */
+    --color-text-primary: #5d4037; /* Warm brown */
+    --color-text-secondary: #795548; /* Lighter brown */
+    --color-accent-1: #ff8a80; /* Soft red/pink */
+    --color-accent-2: #ffcc80; /* Soft orange */
+    --color-accent-3: #8d6e63; /* Brown accent */
+    --gradient-primary: linear-gradient(135deg, #ff8a80 0%, #ffcc80 100%);
+    
+    background-image: url('../assets/images/pattern.png');
+    background-size: 400px;
+    background-blend-mode: normal; /* Removed multiply to see pattern better */
+}
+
+body.moo-theme .nav__logo .logo-text {
+    background: #5d4037;
+    color: #fff9f0;
+}
+
+/* Moo Overlay */
+.moo-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(93, 64, 55, 0.7); /* Slightly reduced background opacity */
+    backdrop-filter: blur(4px); /* Reduced blur */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.moo-overlay:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.moo-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 500px;
+}
+
+.moo-cow {
+    width: 180px;
+    margin-bottom: -40px;
+    z-index: 2;
+    /* Blend multiply to remove white/light pixels if any remain, and drop shadow */
+    /* Removed mix-blend-mode: multiply since background is now solid cream matching the card */
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
     animation: cowFloat 3s ease-in-out infinite;
 }
 
@@ -1213,6 +1470,7 @@ body.moo-theme .nav__logo .logo-text {
     width: 100%;
     position: relative;
     border: 4px solid #5d4037;
+    z-index: 1; /* Ensure card is above cow's mix-blend backdrop if needed */
 }
 
 .moo-close {
@@ -1261,53 +1519,71 @@ body.moo-theme .nav__logo .logo-text {
     flex-wrap: wrap;
 }
 
-.btn--moo {
-    background: #5d4037;
-    color: #fff9f0;
-    border: 2px solid #5d4037;
-}
-
-.btn--moo:hover {
-    background: #795548;
-    transform: translateY(-2px);
-}
-
-.btn--moo-outline {
-    background: transparent;
+/* Updated button styles to look uniform initially */
+.btn--moo, .btn--moo-outline {
+    background: #fff9f0;
     color: #5d4037;
     border: 2px solid #5d4037;
 }
 
-.btn--moo-outline:hover {
+.btn--moo:hover, .btn--moo-outline:hover {
     background: #5d4037;
     color: #fff9f0;
+    transform: translateY(-2px);
 }
 
-/* Confetti Canvas */
-#confetti-canvas {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 10;
+.btn--moo-blue {
+    background: #3498db;
+    color: #fff;
+    border: 2px solid #3498db;
+    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
 }
 
-/* Floating Hearts */
-.floating-hearts {
+.btn--moo-blue:hover {
+    background: #2980b9;
+    border-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Password Input Styles */
+.moo-input-group {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     gap: 1rem;
-    font-size: 2.5rem;
-    margin-top: 1rem;
+    align-items: center;
+    width: 100%;
 }
 
-.floating-hearts span {
-    animation: heartFloat 2s ease-in-out infinite;
+.moo-input {
+    padding: 12px 20px;
+    border: 2px solid #5d4037;
+    border-radius: 99px;
+    background: #fff;
+    color: #5d4037;
+    font-size: 1rem;
+    text-align: center;
+    width: 100%;
+    max-width: 280px;
+    outline: none;
 }
 
-.floating-hearts span:nth-child(2) { animation-delay: 0.2s; }
-.floating-hearts span:nth-child(3) { animation-delay: 0.4s; }
+.moo-input:focus {
+    border-color: #ff8a80;
+    box-shadow: 0 0 0 3px rgba(255, 138, 128, 0.2);
+}
 
-@keyframes heartFloat {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-10px) scale(1.1); }
+/* Ensure cow is absolutely on top of EVERYTHING */
+.moo-cow {
+    width: 180px;
+    margin-bottom: -40px;
+    position: relative;
+    z-index: 9999 !important; /* Force to top */
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+    animation: cowFloat 3s ease-in-out infinite;
+    pointer-events: none; /* Let clicks pass through if needed, though card handles them */
+}
+
+/* Ensure overlay is extremely high z-index */
+.moo-overlay {
+    z-index: 10000;
 }
