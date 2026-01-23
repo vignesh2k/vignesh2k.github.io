@@ -1948,3 +1948,37 @@ body.moo-theme .nav__logo .logo-text {
         transform: translateY(-20px);
     }
 }
+
+/* ============================================
+   Moo Trigger Fixed
+   ============================================ */
+.moo-trigger-fixed {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    /* Or left: 50%; transform: translateX(-50%); for center */
+    /* Let's go with bottom-right as it's cleaner */
+    font-size: 2rem;
+    z-index: 900;
+    /* Below modal (1000+) but above content */
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: transform var(--transition-base);
+    padding: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    /* Optional: subtle background to make it pop if over busy content */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.moo-trigger-fixed:hover {
+    transform: scale(1.2) rotate(10deg);
+    background: rgba(255, 255, 255, 0.2);
+}
