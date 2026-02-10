@@ -213,130 +213,126 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ============================================
    Moo Game Logic
    ============================================ */
-// State for the game
-/* ============================================
-   Moo Game Logic (Secure Data)
-   ============================================ */
 
-const MOO_GAME_KEY = "MooMooKey"; // XOR Key
-
+// 1. OBFUSCATED Data
+const PUBLIC_OBFUSCATION_KEY = "MooMooKey";
 const MOO_GAME_DATA = {
-    steps: {
-        password: {
-            type: "input",
-            title: "1e0a0c3f0a1b6b241a2e0a1c3e4f9fd4f1eb",
-            text: "1a070e394f0638452f24081a6a1c4f2d040f221a1d241b0a6b0b102e04012c020a6b03163f4f16221a4f09202a042b2a1e4f22240a46",
-            placeholder: "08011b281d4f250c1a26010e200a41654b",
-            correctAnswer: "7e08385fd26b116c84fdee726df8c7410dfd2de9f74867d599a9aace8513380c",
-            nextStep: 0,
-            errorMsg: "0c0c0c281c1c6b011c23060a2941416545162303166d22002416592c030322180a2f4459bdf0ffe3"
+    "steps": {
+        "password": {
+            "type": "input",
+            "title": "1e0a0c3f0a1b6b241a2e0a1c3e4f9fd4f1eb",
+            "text": "1a070e394f0638452f24081a6a1c4f2d040f221a1d241b0a6b0b102e04012c020a6b03163f4f16221a4f09202a042b2a1e4f22240a46",
+            "placeholder": "08011b281d4f250c1a26010e200a41654b",
+            "nextStep": 0,
+            "errorMsg": "0c0c0c281c1c6b011c23060a2941416545162303166d22002416592c030322180a2f4459bdf0ffe3"
         },
-        0: {
-            type: "intro",
-            title: "0000006c4f9fd4f5d7",
-            text: "14001a6a190a6b031638010b6d1b072e450a280c1d281b4f280a0e6d030a3b0a036a452b280e0b344f092417592c4f03241b1b2700592e070e21030a25021c72",
-            buttonText: "010a1b6a1c4f0c0a58",
-            nextStep: 1
+        "0": {
+            "type": "intro",
+            "title": "0000006c4f9fd4f5d7",
+            "text": "14001a6a190a6b031638010b6d1b072e450a280c1d281b4f280a0e6d030a3b0a036a452b280e0b344f092417592c4f03241b1b2700592e070e21030a25021c72",
+            "buttonText": "010a1b6a1c4f0c0a58",
+            "nextStep": 1
         },
-        1: {
-            type: "choice",
-            title: "1c1a0a3e1b06240b597c",
-            text: "1a070e394f06384514344f092c1900390c0d284f0c220300395a",
-            options: [
+        "1": {
+            "type": "choice",
+            "title": "1c1a0a3e1b06240b597c",
+            "text": "1a070e394f06384514344f092c1900390c0d284f0c220300395a",
+            "options": [
                 {
-                    text: "1d1a1d3d030a",
-                    correct: true,
-                    nextStep: 2
+                    "text": "1d1a1d3d030a",
+                    "correct": true,
+                    "nextStep": 2
                 },
                 {
-                    text: "1d060126",
-                    correct: false,
-                    errorMsg: "191d166d0e082a0c176c4f9fd2ffc1"
+                    "text": "1d060126",
+                    "correct": false,
+                    "errorMsg": "191d166d0e082a0c176c4f9fd2ffc1"
                 }
             ]
         },
-        2: {
-            type: "choice",
-            title: "1c1a0a3e1b06240b597f",
-            text: "1a070e394f06384516381d4f291d0a2a0859290a1c3906012a1110220150",
-            options: [
+        "2": {
+            "type": "choice",
+            "title": "1c1a0a3e1b06240b597f",
+            "text": "1a070e394f06384516381d4f291d0a2a0859290a1c3906012a1110220150",
+            "options": [
                 {
-                    text: "1b061c241b0625025903362c6d494f080d102103",
-                    correct: false,
-                    errorMsg: "1900006d0c072a0a0d240c4e6d9ff0dbcb"
+                    "text": "1b061c241b0625025903362c6d494f080d102103",
+                    "correct": false,
+                    "errorMsg": "1900006d0c072a0a0d240c4e6d9ff0dbcb"
                 },
                 {
-                    text: "03001d39070a390b59010608251b1c6b0c176d21003f180e32",
-                    correct: true,
-                    nextStep: 3
+                    "text": "03001d39070a390b59010608251b1c6b0c176d21003f180e32",
+                    "correct": true,
+                    "nextStep": 3
                 }
             ]
         },
-        3: {
-            type: "input",
-            title: "1c1a0a3e1b06240b597e",
-            text: "1a070e394f0638450d250a4f2e0e1f221118214f002b4f1b230059183c2e724f4723001128070a64",
-            placeholder: "08011b281d4f280c0d34414163",
-            correctAnswer: [
+        "3": {
+            "type": "input",
+            "title": "1c1a0a3e1b06240b597e",
+            "text": "1a070e394f0638450d250a4f2e0e1f221118214f002b4f1b230059183c2e724f4723001128070a64",
+            "placeholder": "08011b281d4f280c0d34414163",
+            "correctAnswer": [
                 "1865e4f9be9639fc76d7d4da8ee25eaa7421f6837accb67516937e69469ea7e4",
                 "211be92b4add74dcb7e6c1080fdc4195804d343d461437469af792694f5dcbeb",
+                "abecdf3503635c0be9eca61cddf5b25c7f8380d5aae7d73d0f62e9a38c87b70d",
                 "a1ed2667544204982407a78f80038326f874646daaae450d25f736742d7e5bc1"
             ],
-            nextStep: 4,
-            errorMsg: "050a0728070a654b576d1b1d344f0e2c0410234e4fbdf0e8f195e6cad7"
+            "nextStep": 4,
+            "errorMsg": "050a0728070a654b576d1b1d344f0e2c0410234e4fbdf0e8f195e6cad7"
         },
-        4: {
-            type: "choice",
-            title: "1c1a0a3e1b06240b5979",
-            text: "1a07006d061c6b111821030a3f504fbbfaeac2",
-            options: [
+        "4": {
+            "type": "choice",
+            "title": "1c1a0a3e1b06240b5979",
+            "text": "1a07006d061c6b111821030a3f504fbbfaeac2",
+            "options": [
                 {
-                    text: "1b060838",
-                    correct: true,
-                    nextStep: 5
+                    "text": "1b060838",
+                    "correct": true,
+                    "nextStep": 5
                 },
                 {
-                    text: "000000",
-                    correct: false,
-                    errorMsg: "044f18241c076a4589d2ffc1"
+                    "text": "000000",
+                    "correct": false,
+                    "errorMsg": "044f18241c076a4589d2ffc1"
                 }
             ]
         },
-        5: {
-            type: "choice",
-            title: "1c1a0a3e1b06240b5978",
-            text: "1a070e394f0e3900593a0a50",
-            options: [
+        "5": {
+            "type": "choice",
+            "title": "1c1a0a3e1b06240b5978",
+            "text": "1a070e394f0e3900593a0a50",
+            "options": [
                 {
-                    text: "021b1b281d1c6b03163f4f0324090a",
-                    correct: true,
-                    action: "celebrate"
+                    "text": "021b1b281d1c6b03163f4f0324090a",
+                    "correct": true,
+                    "action": "celebrate"
                 },
                 {
-                    text: "0300016d2c072a0918231b4f1d0a0a3b16",
-                    correct: false,
-                    errorMsg: "03004f3a0e166a4589d2ffc1"
+                    "text": "0300016d2c072a0918231b4f1d0a0a3b16",
+                    "correct": false,
+                    "errorMsg": "03004f3a0e166a4589d2ffc1"
                 }
             ]
         }
     }
-}
+};
 
 // Current Step State
 let currentStepId = 'password';
 
+// ==========================================
+// Crypto Helpers
+// ==========================================
+
 // Helper to decode XOR strings (UTF-8 aware)
-function decode(hexStr) {
+function decodeXor(hexStr, key) {
     const bytes = [];
     for (let i = 0; i < hexStr.length; i += 2) {
         bytes.push(parseInt(hexStr.substr(i, 2), 16));
     }
-
-    // XOR decryption on bytes
-    const keyBytes = new TextEncoder().encode(MOO_GAME_KEY);
+    const keyBytes = new TextEncoder().encode(key);
     const decryptedBytes = bytes.map((byte, i) => byte ^ keyBytes[i % keyBytes.length]);
-
-    // Convert back to string using TextDecoder (handles Unicode/Emojis)
     return new TextDecoder().decode(new Uint8Array(decryptedBytes));
 }
 
@@ -351,6 +347,18 @@ async function hashAnswer(text) {
 
 // Helper to check answers
 async function checkAnswer(input, correct) {
+    // 1. Check Password Special Case
+    if (currentStepId === 'password') {
+        const validHash = "e3aea45cf2a468604cae042cc0b1c0427fb9c3cb2172c07505d12d79212133b0"; // sha256("cutose")
+        const inputHash = await hashAnswer(input);
+
+        if (inputHash === validHash) {
+            return true;
+        }
+        return false;
+    }
+
+    // Normal game flow validation
     const inputHash = await hashAnswer(input);
     if (Array.isArray(correct)) {
         return correct.includes(inputHash);
@@ -361,7 +369,7 @@ async function checkAnswer(input, correct) {
 // Function to render a step
 function renderStep(stepId) {
     const container = document.getElementById('moo-game-content');
-    if (!container) return; // Should exist
+    if (!container) return;
 
     // Handle special 'success' step which is static in HTML
     if (stepId === 'success') {
@@ -369,7 +377,7 @@ function renderStep(stepId) {
         const successEl = document.getElementById('game-step-success');
         if (successEl) {
             successEl.classList.remove('hidden');
-            successEl.style.display = 'block'; // Ensure it's visible if hidden via CSS
+            successEl.style.display = 'block';
 
             // Trigger animations
             setTimeout(() => {
@@ -414,36 +422,42 @@ function renderStep(stepId) {
 
     currentStepId = stepId;
 
-    // Decode strings for display
-    const title = decode(stepData.title);
-    const text = decode(stepData.text);
+    // Helper to get text content
+    const getText = (str) => {
+        if (!str) return '';
+        // Always decode XOR for text fields in this version
+        return decodeXor(str, PUBLIC_OBFUSCATION_KEY);
+    };// State for the game
+
+    const title = getText(stepData.title);
+    const text = getText(stepData.text);
 
     let html = `
-        <div class="game-step active" id="dynamic-step-${stepId}">
-            <h2 class="moo-title">${title}</h2>
-            <p class="moo-text">${text}</p>
-    `;
+    <div class="game-step active" id="dynamic-step-${stepId}">
+        <h2 class="moo-title">${title}</h2>
+        <p class="moo-text">${text}</p>
+`;
 
     if (stepData.type === 'input') {
-        const placeholder = decode(stepData.placeholder);
+        const placeholder = getText(stepData.placeholder);
         html += `
-            <div class="moo-input-group">
-                <input type="text" id="moo-input-${stepId}" class="moo-input" placeholder="${placeholder}">
-                <button class="btn btn--moo" id="moo-submit-${stepId}">Submit</button>
-            </div>
-        `;
+        <div class="moo-input-group">
+            <input type="text" id="moo-input-${stepId}" class="moo-input" placeholder="${placeholder}">
+            <button class="btn btn--moo" id="moo-submit-${stepId}">Submit</button>
+        </div>
+    `;
     } else if (stepData.type === 'choice') {
         html += `<div class="moo-options">`;
         stepData.options.forEach((opt, idx) => {
-            const btnText = decode(opt.text);
+            const btnText = getText(opt.text);
             html += `<button class="btn btn--moo${idx % 2 !== 0 ? '-outline' : ''}" data-opt-idx="${idx}">${btnText}</button>`;
         });
         html += `</div>`;
     } else if (stepData.type === 'intro') {
-        const btnText = decode(stepData.buttonText);
+        const btnText = getText(stepData.buttonText);
         html += `
-            <button class="btn btn--moo" id="moo-action-${stepId}">${btnText}</button>
-        `;
+        <button class="btn btn--moo" id="moo-action-${stepId}">${btnText}</button>
+    `;
     }
 
     html += `</div>`;
@@ -455,12 +469,24 @@ function renderStep(stepId) {
         const input = document.getElementById(`moo-input-${stepId}`);
 
         const handleSubmit = async () => {
-            const isCorrect = await checkAnswer(input.value, stepData.correctAnswer);
-            if (isCorrect) {
-                window.nextStep(stepData.nextStep);
+            // Check password or answer
+            if (stepId === 'password') {
+                // We simplified this to just check hash in checkAnswer
+                const isCorrect = await checkAnswer(input.value);
+                if (isCorrect) {
+                    window.nextStep(stepData.nextStep);
+                } else {
+                    window.showMooModal(getText(stepData.errorMsg));
+                    input.value = '';
+                }
             } else {
-                window.showMooModal(decode(stepData.errorMsg));
-                input.value = '';
+                const isCorrect = await checkAnswer(input.value, stepData.correctAnswer);
+                if (isCorrect) {
+                    window.nextStep(stepData.nextStep);
+                } else {
+                    window.showMooModal(getText(stepData.errorMsg));
+                    input.value = '';
+                }
             }
         };
 
@@ -484,7 +510,7 @@ function renderStep(stepId) {
                         window.nextStep(opt.nextStep);
                     }
                 } else {
-                    window.showMooModal(decode(opt.errorMsg));
+                    window.showMooModal(getText(opt.errorMsg));
                 }
             });
         });
@@ -558,9 +584,6 @@ document.addEventListener('DOMContentLoaded', () => {
             mooGame.classList.add('hidden');
             document.body.classList.remove('moo-theme');
             stopConfetti();
-
-            // Reset content slightly so it's clean for next open? 
-            // effectively renderStep('password') will handle it next time.
         });
     }
 });
@@ -637,5 +660,3 @@ function stopConfetti() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 }
-
-
