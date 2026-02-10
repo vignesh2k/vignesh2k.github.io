@@ -215,56 +215,58 @@ document.addEventListener('DOMContentLoaded', () => {
    ============================================ */
 // State for the game
 /* ============================================
-   Moo Game Logic (Obfuscated Data)
+   Moo Game Logic (Secure Data)
    ============================================ */
+
+const MOO_GAME_KEY = "MooMooKey"; // XOR Key
 
 const MOO_GAME_DATA = {
     steps: {
         password: {
             type: "input",
-            title: "U2VjcmV0IEFjY2VzcyDwn5SS",
-            text: "V2hhdCBpcyBWaWd1J3MgZmF2b3VyaXRlIG5pY2tuYW1lIGZvciB5b3UgQkVTSURFUyBNb28/",
-            placeholder: "RW50ZXIgbmlja25hbWUuLi4=",
-            correctAnswer: "bW9vamVlYg==",
+            title: "1e0a0c3f0a1b6b241a2e0a1c3e4f9fd4f1eb",
+            text: "1a070e394f0638452f24081a6a1c4f2d040f221a1d241b0a6b0b102e04012c020a6b03163f4f16221a4f09202a042b2a1e4f22240a46",
+            placeholder: "08011b281d4f250c1a26010e200a41654b",
+            correctAnswer: "7e08385fd26b116c84fdee726df8c7410dfd2de9f74867d599a9aace8513380c",
             nextStep: 0,
-            errorMsg: "QWNjZXNzIGRlbmllZC4uLiBvbmx5IE1vb3MgYWFsbG93ZWQhIPCfkK4="
+            errorMsg: "0c0c0c281c1c6b011c23060a2941416545162303166d22002416592c030322180a2f4459bdf0ffe3"
         },
         0: {
             type: "intro",
-            title: "TW9vISDwn5Cu",
-            text: "WW91J3ZlIGZvdW5kIHRoZSBzZWNyZXQgY293IGxldmVsISBSZWFkeSBmb3IgYSBsaXR0bGUgY2hhbGxlbmdlPw==",
-            buttonText: "TGV0J3MgR28h",
+            title: "0000006c4f9fd4f5d7",
+            text: "14001a6a190a6b031638010b6d1b072e450a280c1d281b4f280a0e6d030a3b0a036a452b280e0b344f092417592c4f03241b1b2700592e070e21030a25021c72",
+            buttonText: "010a1b6a1c4f0c0a58",
             nextStep: 1
         },
         1: {
             type: "choice",
-            title: "UXVlc3Rpb24gMQ==",
-            text: "V2hhdCBpcyBteSBmYXZvcml0ZSBjb2xvcj8=",
+            title: "1c1a0a3e1b06240b597c",
+            text: "1a070e394f06384514344f092c1900390c0d284f0c220300395a",
             options: [
                 {
-                    text: "UHVycGxl",
+                    text: "1d1a1d3d030a",
                     correct: true,
                     nextStep: 2
                 },
                 {
-                    text: "UGluaw==",
+                    text: "1d060126",
                     correct: false,
-                    errorMsg: "VHJ5IGFnYWluISDwn5Cu"
+                    errorMsg: "191d166d0e082a0c176c4f9fd2ffc1"
                 }
             ]
         },
         2: {
             type: "choice",
-            title: "UXVlc3Rpb24gMg==",
-            text: "V2hhdCBpcyBvdXIgZHJlYW0gZGVzdGluYXRpb24/",
+            title: "1c1a0a3e1b06240b597f",
+            text: "1a070e394f06384516381d4f291d0a2a0859290a1c3906012a1110220150",
             options: [
                 {
-                    text: "VmlzaXRpbmcgTllDICYgQ2hpbGw=",
+                    text: "1b061c241b0625025903362c6d494f080d102103",
                     correct: false,
-                    errorMsg: "VG9vIGNoYW90aWMhIPCfkK4="
+                    errorMsg: "1900006d0c072a0a0d240c4e6d9ff0dbcb"
                 },
                 {
-                    text: "Tm9ydGhlcm4gTGlnaHRzIGluIE5vcndheQ==",
+                    text: "03001d39070a390b59010608251b1c6b0c176d21003f180e32",
                     correct: true,
                     nextStep: 3
                 }
@@ -272,76 +274,88 @@ const MOO_GAME_DATA = {
         },
         3: {
             type: "input",
-            title: "UXVlc3Rpb24gMw==",
-            text: "V2hhdCBpcyB0aGUgY2FwaXRhbCBvZiB0aGUgVVNBPyAoaGVoZWhlKQ==",
-            placeholder: "RW50ZXIgY2l0eS4uLg==",
+            title: "1c1a0a3e1b06240b597e",
+            text: "1a070e394f0638450d250a4f2e0e1f221118214f002b4f1b230059183c2e724f4723001128070a64",
+            placeholder: "08011b281d4f280c0d34414163",
             correctAnswer: [
-                "d2FzaGluZ3Rvbg==",
-                "d2FzaGluZ3RvbiBkYw==",
-                "d2FzaGluZ3RvbiBkLmMu"
+                "1865e4f9be9639fc76d7d4da8ee25eaa7421f6837accb67516937e69469ea7e4",
+                "211be92b4add74dcb7e6c1080fdc4195804d343d461437469af792694f5dcbeb",
+                "a1ed2667544204982407a78f80038326f874646daaae450d25f736742d7e5bc1"
             ],
             nextStep: 4,
-            errorMsg: "SGVoZWhlLi4uIHRyeSBhZ2FpbiEg8J+HuvCfh7g="
+            errorMsg: "050a0728070a654b576d1b1d344f0e2c0410234e4fbdf0e8f195e6cad7"
         },
         4: {
             type: "choice",
-            title: "UXVlc3Rpb24gNA==",
-            text: "V2hvIGlzIHRhbGxlcj8g8J+Tjw==",
+            title: "1c1a0a3e1b06240b5979",
+            text: "1a07006d061c6b111821030a3f504fbbfaeac2",
             options: [
                 {
-                    text: "VmlndQ==",
+                    text: "1b060838",
                     correct: true,
                     nextStep: 5
                 },
                 {
-                    text: "TW9v",
+                    text: "000000",
                     correct: false,
-                    errorMsg: "SSB3aXNoISDwn5Cu"
+                    errorMsg: "044f18241c076a4589d2ffc1"
                 }
             ]
         },
         5: {
             type: "choice",
-            title: "UXVlc3Rpb24gNQ==",
-            text: "V2hhdCBhcmUgd2U/",
+            title: "1c1a0a3e1b06240b5978",
+            text: "1a070e394f0e3900593a0a50",
             options: [
                 {
-                    text: "T3R0ZXJzIGZvciBsaWZl",
+                    text: "021b1b281d1c6b03163f4f0324090a",
                     correct: true,
                     action: "celebrate"
                 },
                 {
-                    text: "Tm9uIENoYWxhbnQgUGVlcHM=",
+                    text: "0300016d2c072a0918231b4f1d0a0a3b16",
                     correct: false,
-                    errorMsg: "Tm8gd2F5ISDwn5Cu"
+                    errorMsg: "03004f3a0e166a4589d2ffc1"
                 }
             ]
         }
     }
-};
+}
 
 // Current Step State
 let currentStepId = 'password';
 
-// Helper to decode Base64 strings
-function decode(str) {
-    try {
-        return decodeURIComponent(escape(atob(str))); // Handle UTF-8 characters (emojis)
-    } catch (e) {
-        console.error("Decoding error", e);
-        return str;
+// Helper to decode XOR strings (UTF-8 aware)
+function decode(hexStr) {
+    const bytes = [];
+    for (let i = 0; i < hexStr.length; i += 2) {
+        bytes.push(parseInt(hexStr.substr(i, 2), 16));
     }
+
+    // XOR decryption on bytes
+    const keyBytes = new TextEncoder().encode(MOO_GAME_KEY);
+    const decryptedBytes = bytes.map((byte, i) => byte ^ keyBytes[i % keyBytes.length]);
+
+    // Convert back to string using TextDecoder (handles Unicode/Emojis)
+    return new TextDecoder().decode(new Uint8Array(decryptedBytes));
+}
+
+// Helper to hash answer (SHA-256)
+async function hashAnswer(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text.trim().toLowerCase());
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 // Helper to check answers
-function checkAnswer(input, correct) {
-    const normalize = str => str.trim().toLowerCase();
-
-    // If correct is an array, check if any match matches the input
+async function checkAnswer(input, correct) {
+    const inputHash = await hashAnswer(input);
     if (Array.isArray(correct)) {
-        return correct.some(c => normalize(input) === normalize(decode(c)));
+        return correct.includes(inputHash);
     }
-    return normalize(input) === normalize(decode(correct));
+    return inputHash === correct;
 }
 
 // Function to render a step
@@ -440,8 +454,9 @@ function renderStep(stepId) {
         const btn = document.getElementById(`moo-submit-${stepId}`);
         const input = document.getElementById(`moo-input-${stepId}`);
 
-        const handleSubmit = () => {
-            if (checkAnswer(input.value, stepData.correctAnswer)) {
+        const handleSubmit = async () => {
+            const isCorrect = await checkAnswer(input.value, stepData.correctAnswer);
+            if (isCorrect) {
                 window.nextStep(stepData.nextStep);
             } else {
                 window.showMooModal(decode(stepData.errorMsg));
