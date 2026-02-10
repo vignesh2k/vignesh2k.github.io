@@ -215,70 +215,106 @@ document.addEventListener('DOMContentLoaded', () => {
    ============================================ */
 // State for the game
 /* ============================================
-   Moo Game Logic (Data-Driven)
+   Moo Game Logic (Obfuscated Data)
    ============================================ */
 
 const MOO_GAME_DATA = {
     steps: {
         password: {
-            type: 'input',
-            title: 'Secret Access 🔒',
-            text: 'What is Vigu\'s favourite nickname for you BESIDES Moo?<br><span style="font-size: 0.9em; opacity: 0.8;">(Hint: It ends in ose 😉)</span>',
-            placeholder: 'Enter nickname...',
-            correctAnswer: 'cutose', // We could base64 this but simple string compare is fine for now as per plan
+            type: "input",
+            title: "U2VjcmV0IEFjY2VzcyDwn5SS",
+            text: "V2hhdCBpcyBWaWd1J3MgZmF2b3VyaXRlIG5pY2tuYW1lIGZvciB5b3UgQkVTSURFUyBNb28/PGJyPjxzcGFuIHN0eWxlPSJmb250LXNpemU6IDAuOWVtOyBvcGFjaXR5OiAwLjg7Ij4oSGludDogSXQgZW5kcyBpbiBvc2Ug8J+YiSk8L3NwYW4+",
+            placeholder: "RW50ZXIgbmlja25hbWUuLi4=",
+            correctAnswer: "Y3V0b3Nl",
             nextStep: 0,
-            errorMsg: 'Access denied... only Moos allowed! 🐮'
+            errorMsg: "QWNjZXNzIGRlbmllZC4uLiBvbmx5IE1vb3MgYWFsbG93ZWQhIPCfkK4="
         },
         0: {
-            type: 'intro',
-            title: 'Moo! 🐮',
-            text: 'You\'ve found the secret cow level! Ready for a little challenge?',
-            buttonText: "Let's Go!",
+            type: "intro",
+            title: "TW9vISDwn5Cu",
+            text: "WW91J3ZlIGZvdW5kIHRoZSBzZWNyZXQgY293IGxldmVsISBSZWFkeSBmb3IgYSBsaXR0bGUgY2hhbGxlbmdlPw==",
+            buttonText: "TGV0J3MgR28h",
             nextStep: 1
         },
         1: {
-            type: 'choice',
-            title: 'Question 1',
-            text: 'What is my favorite color?',
+            type: "choice",
+            title: "UXVlc3Rpb24gMQ==",
+            text: "V2hhdCBpcyBteSBmYXZvcml0ZSBjb2xvcj8=",
             options: [
-                { text: 'Purple', correct: true, nextStep: 2 },
-                { text: 'Pink', correct: false, errorMsg: 'Try again! 🐮' }
+                {
+                    text: "UHVycGxl",
+                    correct: true,
+                    nextStep: 2
+                },
+                {
+                    text: "UGluaw==",
+                    correct: false,
+                    errorMsg: "VHJ5IGFnYWluISDwn5Cu"
+                }
             ]
         },
         2: {
-            type: 'choice',
-            title: 'Question 2',
-            text: 'What is our dream destination?',
+            type: "choice",
+            title: "UXVlc3Rpb24gMg==",
+            text: "V2hhdCBpcyBvdXIgZHJlYW0gZGVzdGluYXRpb24/",
             options: [
-                { text: 'Visiting NYC & Chill', correct: false, errorMsg: 'Too chaotic! 🐮' },
-                { text: 'Northern Lights in Norway', correct: true, nextStep: 3 }
+                {
+                    text: "VmlzaXRpbmcgTllDICYgQ2hpbGw=",
+                    correct: false,
+                    errorMsg: "VG9vIGNoYW90aWMhIPCfkK4="
+                },
+                {
+                    text: "Tm9ydGhlcm4gTGlnaHRzIGluIE5vcndheQ==",
+                    correct: true,
+                    nextStep: 3
+                }
             ]
         },
         3: {
-            type: 'input',
-            title: 'Question 3',
-            text: 'What is the capital of the USA? (hehehe)',
-            placeholder: 'Enter city...',
-            correctAnswer: ['washington', 'washington dc', 'washington d.c.'],
+            type: "input",
+            title: "UXVlc3Rpb24gMw==",
+            text: "V2hhdCBpcyB0aGUgY2FwaXRhbCBvZiB0aGUgVVNBPyAoaGVoZWhlKQ==",
+            placeholder: "RW50ZXIgY2l0eS4uLg==",
+            correctAnswer: [
+                "d2FzaGluZ3Rvbg==",
+                "d2FzaGluZ3RvbiBkYw==",
+                "d2FzaGluZ3RvbiBkLmMu"
+            ],
             nextStep: 4,
-            errorMsg: 'Hehehe... try again! 🇺🇸'
+            errorMsg: "SGVoZWhlLi4uIHRyeSBhZ2FpbiEg8J+HuvCfh7g="
         },
         4: {
-            type: 'choice',
-            title: 'Question 4',
-            text: 'Who is taller? 📏',
+            type: "choice",
+            title: "UXVlc3Rpb24gNA==",
+            text: "V2hvIGlzIHRhbGxlcj8g8J+Tjw==",
             options: [
-                { text: 'Vigu', correct: true, nextStep: 5 },
-                { text: 'Moo', correct: false, errorMsg: 'I wish! 🐮' }
+                {
+                    text: "VmlndQ==",
+                    correct: true,
+                    nextStep: 5
+                },
+                {
+                    text: "TW9v",
+                    correct: false,
+                    errorMsg: "SSB3aXNoISDwn5Cu"
+                }
             ]
         },
         5: {
-            type: 'choice',
-            title: 'Question 5',
-            text: 'What are we?',
+            type: "choice",
+            title: "UXVlc3Rpb24gNQ==",
+            text: "V2hhdCBhcmUgd2U/",
             options: [
-                { text: 'Otters for life', correct: true, action: 'celebrate' }, // Special action
-                { text: 'Non Chalant Peeps', correct: false, errorMsg: 'No way! 🐮' }
+                {
+                    text: "T3R0ZXJzIGZvciBsaWZl",
+                    correct: true,
+                    action: "celebrate"
+                },
+                {
+                    text: "Tm9uIENoYWxhbnQgUGVlcHM=",
+                    correct: false,
+                    errorMsg: "Tm8gd2F5ISDwn5Cu"
+                }
             ]
         }
     }
@@ -287,13 +323,25 @@ const MOO_GAME_DATA = {
 // Current Step State
 let currentStepId = 'password';
 
-// Helper to check answers (simple obfuscation could be added here if needed)
+// Helper to decode Base64 strings
+function decode(str) {
+    try {
+        return decodeURIComponent(escape(atob(str))); // Handle UTF-8 characters (emojis)
+    } catch (e) {
+        console.error("Decoding error", e);
+        return str;
+    }
+}
+
+// Helper to check answers
 function checkAnswer(input, correct) {
     const normalize = str => str.trim().toLowerCase();
+
+    // If correct is an array, check if any match matches the input
     if (Array.isArray(correct)) {
-        return correct.some(c => normalize(input) === normalize(c));
+        return correct.some(c => normalize(input) === normalize(decode(c)));
     }
-    return normalize(input) === normalize(correct);
+    return normalize(input) === normalize(decode(correct));
 }
 
 // Function to render a step
@@ -351,32 +399,36 @@ function renderStep(stepId) {
     if (!stepData) return;
 
     currentStepId = stepId;
+
+    // Decode strings for display
+    const title = decode(stepData.title);
+    const text = decode(stepData.text);
+
     let html = `
         <div class="game-step active" id="dynamic-step-${stepId}">
-            <h2 class="moo-title">${stepData.title}</h2>
-            <p class="moo-text">${stepData.text}</p>
+            <h2 class="moo-title">${title}</h2>
+            <p class="moo-text">${text}</p>
     `;
 
     if (stepData.type === 'input') {
+        const placeholder = decode(stepData.placeholder);
         html += `
             <div class="moo-input-group">
-                <input type="text" id="moo-input-${stepId}" class="moo-input" placeholder="${stepData.placeholder}">
+                <input type="text" id="moo-input-${stepId}" class="moo-input" placeholder="${placeholder}">
                 <button class="btn btn--moo" id="moo-submit-${stepId}">Submit</button>
             </div>
         `;
     } else if (stepData.type === 'choice') {
         html += `<div class="moo-options">`;
         stepData.options.forEach((opt, idx) => {
-            const btnClass = idx === 0 ? 'btn btn--moo' : 'btn btn--moo-outline'; // Simple alternating style or based on content? 
-            // Actually let's just make them all primary for consistency or use what was there.
-            // Old Q1: Purple (Primary), Pink (Outline). 
-            // We can just iterate.
-            html += `<button class="btn btn--moo${idx % 2 !== 0 ? '-outline' : ''}" data-opt-idx="${idx}">${opt.text}</button>`;
+            const btnText = decode(opt.text);
+            html += `<button class="btn btn--moo${idx % 2 !== 0 ? '-outline' : ''}" data-opt-idx="${idx}">${btnText}</button>`;
         });
         html += `</div>`;
     } else if (stepData.type === 'intro') {
+        const btnText = decode(stepData.buttonText);
         html += `
-            <button class="btn btn--moo" id="moo-action-${stepId}">${stepData.buttonText}</button>
+            <button class="btn btn--moo" id="moo-action-${stepId}">${btnText}</button>
         `;
     }
 
@@ -392,7 +444,7 @@ function renderStep(stepId) {
             if (checkAnswer(input.value, stepData.correctAnswer)) {
                 window.nextStep(stepData.nextStep);
             } else {
-                window.showMooModal(stepData.errorMsg);
+                window.showMooModal(decode(stepData.errorMsg));
                 input.value = '';
             }
         };
@@ -417,7 +469,7 @@ function renderStep(stepId) {
                         window.nextStep(opt.nextStep);
                     }
                 } else {
-                    window.showMooModal(opt.errorMsg);
+                    window.showMooModal(decode(opt.errorMsg));
                 }
             });
         });
