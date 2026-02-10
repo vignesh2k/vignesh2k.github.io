@@ -214,15 +214,221 @@ document.addEventListener('DOMContentLoaded', () => {
    Moo Game Logic
    ============================================ */
 // State for the game
-window.nextStep = function (step) {
-    // Hide all steps
-    document.querySelectorAll('.game-step').forEach(el => el.classList.remove('active'));
+/* ============================================
+   Moo Game Logic (Data-Driven)
+   ============================================ */
 
-    // Show requested step
-    const nextEl = document.getElementById('game-step-' + step);
-    if (nextEl) {
-        nextEl.classList.add('active');
+const MOO_GAME_DATA = {
+    steps: {
+        password: {
+            type: 'input',
+            title: 'Secret Access 🔒',
+            text: 'What is Vigu\'s favourite nickname for you BESIDES Moo?<br><span style="font-size: 0.9em; opacity: 0.8;">(Hint: It ends in ose 😉)</span>',
+            placeholder: 'Enter nickname...',
+            correctAnswer: 'cutose', // We could base64 this but simple string compare is fine for now as per plan
+            nextStep: 0,
+            errorMsg: 'Access denied... only Moos allowed! 🐮'
+        },
+        0: {
+            type: 'intro',
+            title: 'Moo! 🐮',
+            text: 'You\'ve found the secret cow level! Ready for a little challenge?',
+            buttonText: "Let's Go!",
+            nextStep: 1
+        },
+        1: {
+            type: 'choice',
+            title: 'Question 1',
+            text: 'What is my favorite color?',
+            options: [
+                { text: 'Purple', correct: true, nextStep: 2 },
+                { text: 'Pink', correct: false, errorMsg: 'Try again! 🐮' }
+            ]
+        },
+        2: {
+            type: 'choice',
+            title: 'Question 2',
+            text: 'What is our dream destination?',
+            options: [
+                { text: 'Visiting NYC & Chill', correct: false, errorMsg: 'Too chaotic! 🐮' },
+                { text: 'Northern Lights in Norway', correct: true, nextStep: 3 }
+            ]
+        },
+        3: {
+            type: 'input',
+            title: 'Question 3',
+            text: 'What is the capital of the USA? (hehehe)',
+            placeholder: 'Enter city...',
+            correctAnswer: ['washington', 'washington dc', 'washington d.c.'],
+            nextStep: 4,
+            errorMsg: 'Hehehe... try again! 🇺🇸'
+        },
+        4: {
+            type: 'choice',
+            title: 'Question 4',
+            text: 'Who is taller? 📏',
+            options: [
+                { text: 'Vigu', correct: true, nextStep: 5 },
+                { text: 'Moo', correct: false, errorMsg: 'I wish! 🐮' }
+            ]
+        },
+        5: {
+            type: 'choice',
+            title: 'Question 5',
+            text: 'What are we?',
+            options: [
+                { text: 'Otters for life', correct: true, action: 'celebrate' }, // Special action
+                { text: 'Non Chalant Peeps', correct: false, errorMsg: 'No way! 🐮' }
+            ]
+        }
     }
+};
+
+// Current Step State
+let currentStepId = 'password';
+
+// Helper to check answers (simple obfuscation could be added here if needed)
+function checkAnswer(input, correct) {
+    const normalize = str => str.trim().toLowerCase();
+    if (Array.isArray(correct)) {
+        return correct.some(c => normalize(input) === normalize(c));
+    }
+    return normalize(input) === normalize(correct);
+}
+
+// Function to render a step
+function renderStep(stepId) {
+    const container = document.getElementById('moo-game-content');
+    if (!container) return; // Should exist
+
+    // Handle special 'success' step which is static in HTML
+    if (stepId === 'success') {
+        container.innerHTML = ''; // Clear dynamic content
+        const successEl = document.getElementById('game-step-success');
+        if (successEl) {
+            successEl.classList.remove('hidden');
+            successEl.style.display = 'block'; // Ensure it's visible if hidden via CSS
+
+            // Trigger animations
+            setTimeout(() => {
+                // Initialize fade-in for gallery
+                const fadeElements = document.querySelectorAll('.fade-in-scroll');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                fadeElements.forEach(el => observer.observe(el));
+                // Fallback
+                setTimeout(() => fadeElements.forEach(el => el.classList.add('visible')), 500);
+            }, 100);
+        }
+        return;
+    }
+
+    // Handle celebration step
+    if (stepId === 'celebration') {
+        container.innerHTML = '';
+        const celEl = document.getElementById('game-step-celebration');
+        if (celEl) {
+            celEl.classList.remove('hidden');
+            celEl.style.display = 'block';
+        }
+        return;
+    }
+
+    // Hide static success/celebration steps if they are visible
+    document.querySelectorAll('.static-game-step').forEach(el => {
+        el.classList.add('hidden');
+        el.style.display = 'none';
+    });
+
+    const stepData = MOO_GAME_DATA.steps[stepId];
+    if (!stepData) return;
+
+    currentStepId = stepId;
+    let html = `
+        <div class="game-step active" id="dynamic-step-${stepId}">
+            <h2 class="moo-title">${stepData.title}</h2>
+            <p class="moo-text">${stepData.text}</p>
+    `;
+
+    if (stepData.type === 'input') {
+        html += `
+            <div class="moo-input-group">
+                <input type="text" id="moo-input-${stepId}" class="moo-input" placeholder="${stepData.placeholder}">
+                <button class="btn btn--moo" id="moo-submit-${stepId}">Submit</button>
+            </div>
+        `;
+    } else if (stepData.type === 'choice') {
+        html += `<div class="moo-options">`;
+        stepData.options.forEach((opt, idx) => {
+            const btnClass = idx === 0 ? 'btn btn--moo' : 'btn btn--moo-outline'; // Simple alternating style or based on content? 
+            // Actually let's just make them all primary for consistency or use what was there.
+            // Old Q1: Purple (Primary), Pink (Outline). 
+            // We can just iterate.
+            html += `<button class="btn btn--moo${idx % 2 !== 0 ? '-outline' : ''}" data-opt-idx="${idx}">${opt.text}</button>`;
+        });
+        html += `</div>`;
+    } else if (stepData.type === 'intro') {
+        html += `
+            <button class="btn btn--moo" id="moo-action-${stepId}">${stepData.buttonText}</button>
+        `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+
+    // Attach Event Listeners
+    if (stepData.type === 'input') {
+        const btn = document.getElementById(`moo-submit-${stepId}`);
+        const input = document.getElementById(`moo-input-${stepId}`);
+
+        const handleSubmit = () => {
+            if (checkAnswer(input.value, stepData.correctAnswer)) {
+                window.nextStep(stepData.nextStep);
+            } else {
+                window.showMooModal(stepData.errorMsg);
+                input.value = '';
+            }
+        };
+
+        btn.addEventListener('click', handleSubmit);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSubmit();
+        });
+
+        // Auto-focus logic could go here
+        setTimeout(() => input.focus(), 100);
+    } else if (stepData.type === 'choice') {
+        const btns = container.querySelectorAll('.moo-options button');
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.optIdx);
+                const opt = stepData.options[idx];
+                if (opt.correct) {
+                    if (opt.action === 'celebrate') {
+                        window.celebrate();
+                    } else {
+                        window.nextStep(opt.nextStep);
+                    }
+                } else {
+                    window.showMooModal(opt.errorMsg);
+                }
+            });
+        });
+    } else if (stepData.type === 'intro') {
+        const btn = document.getElementById(`moo-action-${stepId}`);
+        btn.addEventListener('click', () => window.nextStep(stepData.nextStep));
+    }
+}
+
+window.nextStep = function (step) {
+    renderStep(step);
 };
 
 // Custom Modal Logic
@@ -242,71 +448,11 @@ window.closeMooModal = function () {
     }
 };
 
-window.checkPassword = function () {
-    const input = document.getElementById('moo-password');
-    const password = input.value.trim().toLowerCase();
-
-    if (password === 'cutose') {
-        window.nextStep(0); // Proceed to "Let's Go!"
-    } else {
-        window.showMooModal("Access denied... only Moos allowed! 🐮");
-        input.value = '';
-    }
-};
-
-window.checkCapital = function () {
-    const input = document.getElementById('moo-capital-input');
-    const answer = input.value.trim().toLowerCase();
-
-    if (answer === 'washington' || answer === 'washington dc' || answer === 'washington d.c.') {
-        window.nextStep(4);
-    } else {
-        window.showMooModal("Hehehe... try again! 🇺🇸");
-        input.value = '';
-    }
-};
-
 // Intermediate celebration (unlocks gallery)
 window.celebrate = function () {
     window.nextStep('success');
-
-    // Initialize fade-in observer for the new gallery elements
-    setTimeout(() => {
-        const fadeElements = document.querySelectorAll('.fade-in-scroll');
-        const overlay = document.getElementById('moo-game');
-
-        if (!overlay) return;
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            root: overlay,
-            threshold: 0.05
-        });
-
-        fadeElements.forEach(el => observer.observe(el));
-
-        // Timer fallback
-        setTimeout(() => {
-            fadeElements.forEach(el => el.classList.add('visible'));
-        }, 3000);
-
-        // Debug images
-        document.querySelectorAll('.moo-photo').forEach(img => {
-            img.onerror = function () {
-                this.src = 'assets/images/cow.png';
-                this.style.border = '2px solid red';
-            };
-        });
-    }, 100);
 };
 
-// Final Proposal Action (Bottom of page)
 // Final Proposal Action (Bottom of page)
 window.finalProposal = function () {
     startConfetti();
@@ -318,9 +464,6 @@ window.finalProposal = function () {
 
 // Fireworks Logic (Simple Canvas extension)
 function launchFireworks() {
-    // We reuse the confetti canvas/logic but add "explosion" visuals
-    // For simplicity, we just trigger massive confetti bursts rapidly to simulate fireworks
-    // since implementing a full physics engine might be overkill/error-prone in one step.
     let burstCount = 0;
     const interval = setInterval(() => {
         startConfetti(); // Ensure it's running
@@ -333,44 +476,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const mooTrigger = document.getElementById('moo-trigger');
     const mooGame = document.getElementById('moo-game');
     const mooClose = document.getElementById('moo-close');
-    const passwordInput = document.getElementById('moo-password');
-    const capitalInput = document.getElementById('moo-capital-input');
 
     if (mooTrigger && mooGame) {
         mooTrigger.addEventListener('click', (e) => {
             e.preventDefault();
-            // Toggle Theme
             document.body.classList.add('moo-theme');
-            // Show Overlay
             mooGame.classList.remove('hidden');
-            // Reset game to password step
+
+            // Initial render
             window.nextStep('password');
-            // Clear inputs
-            if (passwordInput) passwordInput.value = '';
-            if (capitalInput) capitalInput.value = '';
-            // Hide otters
-            document.getElementById('otter-celebration').classList.add('hidden');
-            document.querySelectorAll('.game-step').forEach(el => el.classList.remove('active'));
-            document.getElementById('game-step-password').classList.add('active'); // Explicit active
         });
 
         mooClose.addEventListener('click', () => {
             mooGame.classList.add('hidden');
             document.body.classList.remove('moo-theme');
             stopConfetti();
-        });
 
-        // Allow Enter key
-        if (passwordInput) {
-            passwordInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') window.checkPassword();
-            });
-        }
-        if (capitalInput) {
-            capitalInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') window.checkCapital();
-            });
-        }
+            // Reset content slightly so it's clean for next open? 
+            // effectively renderStep('password') will handle it next time.
+        });
     }
 });
 
