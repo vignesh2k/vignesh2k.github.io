@@ -223,9 +223,9 @@ const MOO_GAME_DATA = {
         password: {
             type: "input",
             title: "U2VjcmV0IEFjY2VzcyDwn5SS",
-            text: "V2hhdCBpcyBWaWd1J3MgZmF2b3VyaXRlIG5pY2tuYW1lIGZvciB5b3UgQkVTSURFUyBNb28/PGJyPjxzcGFuIHN0eWxlPSJmb250LXNpemU6IDAuOWVtOyBvcGFjaXR5OiAwLjg7Ij4oSGludDogSXQgZW5kcyBpbiBvc2Ug8J+YiSk8L3NwYW4+",
+            text: "V2hhdCBpcyBWaWd1J3MgZmF2b3VyaXRlIG5pY2tuYW1lIGZvciB5b3UgQkVTSURFUyBNb28/",
             placeholder: "RW50ZXIgbmlja25hbWUuLi4=",
-            correctAnswer: "Y3V0b3Nl",
+            correctAnswer: "bW9vamVlYg==",
             nextStep: 0,
             errorMsg: "QWNjZXNzIGRlbmllZC4uLiBvbmx5IE1vb3MgYWFsbG93ZWQhIPCfkK4="
         },
