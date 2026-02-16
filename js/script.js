@@ -13,27 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // Theme Toggle Functionality
     // ==========================================
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    // Set initial theme
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('theme', 'light');
+    if (themeToggle) {
+        themeToggle.style.display = 'none';
     }
-
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-
-        // Animate icon rotation
-        themeToggle.style.transform = 'rotate(360deg)';
-        setTimeout(() => {
-            themeToggle.style.transform = '';
-        }, 500);
-    });
 
     // ==========================================
     // Mobile Menu Functionality
@@ -165,47 +149,86 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // Scroll Reveal Animation (Intersection Observer)
     // ==========================================
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const observerOptions = {
         root: null,
-        rootMargin: '0px',
-        threshold: 0.1
+        rootMargin: '-6% 0px -6% 0px',
+        threshold: 0.18
     };
 
-    const observer = new IntersectionObserver((entries, observer) => {
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('reveal');
-                observer.unobserve(entry.target);
+                entry.target.classList.add('in-view');
+            } else {
+                entry.target.classList.remove('in-view');
             }
         });
     }, observerOptions);
 
-    // Add reveal class to improved elements
+    // Add animated class to sections/cards
     const elementsToReveal = document.querySelectorAll('.section__title, .about__text, .stat, .skill-card, .project-card, .contact__item, .contact__form');
 
     elementsToReveal.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'all 0.8s ease';
+        el.classList.add('anim-on-scroll');
         observer.observe(el);
     });
 
-    // CSS class for reveal animation is handled via inline styles above for simplicity
-    // But let's add a proper class handler
-    document.querySelectorAll('.reveal').forEach(el => {
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-    });
+    // Hero depth motion and subtle scroll-based movement (no scroll hijack)
+    const heroArea = document.getElementById('hero-motion-area');
+    const motionBlob = document.querySelector('.motion-blob');
+    const motionAvatar = document.querySelector('.motion-avatar');
 
-    // We need to actually trigger the style change when the class is added
-    // Use a MutationObserver or just css transition delay
+    if (!prefersReducedMotion && heroArea && motionBlob && motionAvatar) {
+        const heroPointerMove = (e) => {
+            const rect = heroArea.getBoundingClientRect();
+            const px = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+            const py = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+
+            heroArea.style.setProperty('--pointer-x', px.toFixed(3));
+            heroArea.style.setProperty('--pointer-y', py.toFixed(3));
+        };
+
+        const resetHeroPointer = () => {
+            heroArea.style.setProperty('--pointer-x', '0');
+            heroArea.style.setProperty('--pointer-y', '0');
+        };
+
+        heroArea.addEventListener('mousemove', heroPointerMove);
+        heroArea.addEventListener('mouseleave', resetHeroPointer);
+    }
+
+    const updateScrollDepth = () => {
+        if (prefersReducedMotion) return;
+        const y = window.scrollY || 0;
+        const heroShift = Math.min(y / 800, 1);
+        document.documentElement.style.setProperty('--scroll-depth', heroShift.toFixed(3));
+    };
+
+    window.addEventListener('scroll', updateScrollDepth, { passive: true });
+    updateScrollDepth();
 
     const styleSheet = document.createElement("style");
     styleSheet.innerText = `
-        .reveal {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
+        .anim-on-scroll {
+            opacity: 0;
+            transform: translateY(28px) scale(0.985);
+            transition: opacity 700ms cubic-bezier(.2,.65,.2,1), transform 700ms cubic-bezier(.2,.65,.2,1);
+            will-change: opacity, transform;
         }
+        .anim-on-scroll.in-view {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }`;
+    if (prefersReducedMotion) {
+        styleSheet.innerText += `
+        .anim-on-scroll {
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+        }`;
+    }
+    styleSheet.innerText += `
     `;
     document.head.appendChild(styleSheet);
 });
@@ -349,7 +372,7 @@ async function hashAnswer(text) {
 async function checkAnswer(input, correct) {
     // 1. Check Password Special Case
     if (currentStepId === 'password') {
-        const validHash = "e3aea45cf2a468604cae042cc0b1c0427fb9c3cb2172c07505d12d79212133b0"; // sha256("cutose")
+        const validHash = "7e08385fd26b116c84fdee726df8c7410dfd2de9f74867d599a9aace8513380c"; // sha256("moojeeb")
         const inputHash = await hashAnswer(input);
 
         if (inputHash === validHash) {

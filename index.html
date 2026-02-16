@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -79,10 +80,25 @@
                         <a href="#experience" class="btn btn--primary">View Experience</a>
                         <a href="#contact" class="btn btn--outline">Get In Touch</a>
                     </div>
+                    <div class="hero__facts">
+                        <article class="hero__fact-card">
+                            <span class="hero__fact-label">Specialism</span>
+                            <strong class="hero__fact-value">AI + Commercial Strategy</strong>
+                        </article>
+                        <article class="hero__fact-card">
+                            <span class="hero__fact-label">Current Focus</span>
+                            <strong class="hero__fact-value">PoCs to Scaled Adoption</strong>
+                        </article>
+                        <article class="hero__fact-card">
+                            <span class="hero__fact-label">Based In</span>
+                            <strong class="hero__fact-value">London, UK</strong>
+                        </article>
+                    </div>
                 </div>
-                <div class="hero__image">
-                    <div class="hero__blob">
-                        <div class="hero__avatar">
+                <div class="hero__image" id="hero-motion-area">
+                    <div class="hero__spotlight"></div>
+                    <div class="hero__blob motion-blob">
+                        <div class="hero__avatar motion-avatar">
                             <img src="assets/images/profile.jpeg" alt="Vignesh" class="hero__profile-img">
                         </div>
                     </div>
@@ -270,14 +286,14 @@
 
                 <div class="projects__grid experience-grid">
                     <!-- Education -->
-                    <article class="project-card experience-card" style="border-left: 5px solid #3498db;">
+                    <article class="project-card experience-card education-card">
                         <div class="project-card__content">
                             <h3 class="project-card__title">Education</h3>
                             <div class="education-item">
                                 <strong>University of Warwick</strong> | Sep 2019 - Sep 2023<br>
                                 Master of Mathematics (MMath) with (Hons)
                             </div>
-                            <div class="education-item" style="margin-top: 1rem;">
+                            <div class="education-item education-item--spaced">
                                 <strong>The Royal Latin School</strong> | Sep 2012 - Sep 2019<br>
                                 4 A*s in Maths, Further Maths, Physics, and Economics
                             </div>
@@ -285,7 +301,7 @@
                     </article>
 
                     <!-- Accreditations -->
-                    <article class="project-card experience-card" style="border-left: 5px solid #9b59b6;">
+                    <article class="project-card experience-card accreditation-card">
                         <div class="project-card__content">
                             <h3 class="project-card__title">Professional Development</h3>
                             <ul class="experience-list">
@@ -351,7 +367,7 @@
                             </a>
                             <!-- Moo Game Trigger -->
                             <a href="#" id="moo-trigger" class="social-link moo-trigger-social"
-                                aria-label="Play Moo Game" style="font-size: 1.25rem; text-decoration: none;">🐮</a>
+                                aria-label="Play Moo Game">🐮</a>
                         </div>
                     </div>
 
@@ -458,7 +474,7 @@
                     </p>
 
                     <!-- Proposal at Bottom -->
-                    <div class="moo-proposal fade-in-scroll" style="margin-top: 4rem; padding-bottom: 2rem;">
+                    <div class="moo-proposal fade-in-scroll">
                         <h2 class="moo-title">One last thing...</h2>
                         <p class="moo-text">Will you be my Valentine? 🌹</p>
                         <div class="moo-options">
