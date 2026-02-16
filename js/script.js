@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav__link');
     const themeToggle = document.getElementById('theme-toggle');
     const contactForm = document.getElementById('contact-form');
+    const terminalContact = document.getElementById('terminal-contact');
+    const terminalContactOutput = document.getElementById('terminal-contact-output');
+    const terminalContactInput = document.getElementById('terminal-contact-input');
+    const experienceWindow = document.getElementById('experience-window');
+    const experienceWindowContent = document.getElementById('experience-window-content');
+    const experienceWindowClose = document.getElementById('experience-window-close');
+    const experienceSection = document.getElementById('experience');
 
     // State
     let isMenuOpen = false;
@@ -147,6 +154,125 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
+    // Terminal Contact Flow
+    // ==========================================
+    if (terminalContact && terminalContactOutput && terminalContactInput) {
+        const prompts = [
+            { key: 'name', text: 'Enter your name:' },
+            { key: 'email', text: 'Enter your email:' },
+            { key: 'message', text: 'Enter your message:' }
+        ];
+
+        const terminalData = {};
+        let promptIndex = 0;
+        let readyToSend = false;
+        let sending = false;
+        const mooGame = document.getElementById('moo-game');
+
+        const createLine = (text, className = '') => {
+            const line = document.createElement('div');
+            line.className = `terminal-line ${className}`.trim();
+            line.textContent = text;
+            terminalContactOutput.appendChild(line);
+            terminalContactOutput.scrollTop = terminalContactOutput.scrollHeight;
+        };
+
+        const typeLine = (text, className = '') => {
+            const line = document.createElement('div');
+            line.className = `terminal-line ${className}`.trim();
+            terminalContactOutput.appendChild(line);
+            terminalContactOutput.scrollTop = terminalContactOutput.scrollHeight;
+
+            return new Promise((resolve) => {
+                let i = 0;
+                const timer = setInterval(() => {
+                    line.textContent += text.charAt(i);
+                    i += 1;
+                    terminalContactOutput.scrollTop = terminalContactOutput.scrollHeight;
+                    if (i >= text.length) {
+                        clearInterval(timer);
+                        resolve();
+                    }
+                }, 20);
+            });
+        };
+
+        const promptNext = async () => {
+            if (promptIndex < prompts.length) {
+                await typeLine(prompts[promptIndex].text, 'terminal-line--prompt');
+            } else {
+                readyToSend = true;
+                await typeLine('Hit RETURN to send.', 'terminal-line--prompt');
+            }
+        };
+
+        const sendTerminalMessage = async () => {
+            if (sending) return;
+            sending = true;
+            terminalContactInput.disabled = true;
+            await typeLine('Sending message...', 'terminal-line--system');
+
+            setTimeout(async () => {
+                await typeLine('Message sent. Thank you.', 'terminal-line--success');
+                await typeLine('Session reset. Enter your name:', 'terminal-line--prompt');
+                terminalContactInput.disabled = false;
+                terminalContactInput.value = '';
+                terminalContactInput.focus();
+                promptIndex = 0;
+                readyToSend = false;
+                sending = false;
+            }, 650);
+        };
+
+        const launchMooFromTerminal = async () => {
+            if (!mooGame) {
+                await typeLine('Moo game unavailable.', 'terminal-line--error');
+                return;
+            }
+
+            await typeLine('Launching Moo game...', 'terminal-line--system');
+            document.body.classList.add('moo-theme');
+            mooGame.classList.remove('hidden');
+            if (typeof window.nextStep === 'function') {
+                window.nextStep('password');
+            }
+        };
+
+        createLine('CONTACT TERMINAL v1.0', 'terminal-line--system');
+        promptNext();
+
+        terminalContactInput.addEventListener('keydown', async (e) => {
+            if (e.key !== 'Enter' || sending) return;
+            e.preventDefault();
+
+            const rawValue = terminalContactInput.value;
+            const value = rawValue.trim();
+            createLine(`> ${rawValue}`, 'terminal-line--input');
+            terminalContactInput.value = '';
+
+            if (value.toLowerCase() === 'moo') {
+                await launchMooFromTerminal();
+                return;
+            }
+
+            if (readyToSend) {
+                await sendTerminalMessage();
+                return;
+            }
+
+            if (!value) {
+                await typeLine('Please enter a value.', 'terminal-line--error');
+                await promptNext();
+                return;
+            }
+
+            terminalData[prompts[promptIndex].key] = value;
+            promptIndex += 1;
+            await promptNext();
+        });
+    }
+
+    // ==========================================
     // Scroll Reveal Animation (Intersection Observer)
     // ==========================================
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -207,6 +333,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', updateScrollDepth, { passive: true });
     updateScrollDepth();
+
+    // ==========================================
+    // Skill Cards -> Experience Window
+    // ==========================================
+    const interactiveSkillCards = document.querySelectorAll('.skill-card[data-exp-target]');
+
+    const openExperienceWindow = (targetId) => {
+        if (!experienceWindow || !experienceWindowContent) return;
+
+        const sourceCard = document.getElementById(targetId);
+        if (!sourceCard) return;
+
+        if (experienceSection) {
+            experienceSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        const clonedCard = sourceCard.cloneNode(true);
+        clonedCard.removeAttribute('id');
+        clonedCard.classList.remove('anim-on-scroll', 'in-view');
+        experienceWindowContent.innerHTML = '';
+        experienceWindowContent.appendChild(clonedCard);
+
+        experienceWindow.classList.remove('hidden');
+        experienceWindow.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeExperienceWindow = () => {
+        if (!experienceWindow || !experienceWindowContent) return;
+        experienceWindow.classList.add('hidden');
+        experienceWindow.setAttribute('aria-hidden', 'true');
+        experienceWindowContent.innerHTML = '';
+        document.body.style.overflow = '';
+    };
+
+    interactiveSkillCards.forEach((card) => {
+        card.classList.add('skill-card--interactive');
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+
+        const targetId = card.dataset.expTarget;
+        card.addEventListener('click', () => openExperienceWindow(targetId));
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openExperienceWindow(targetId);
+            }
+        });
+    });
+
+    if (experienceWindowClose) {
+        experienceWindowClose.addEventListener('click', closeExperienceWindow);
+    }
+
+    if (experienceWindow) {
+        experienceWindow.addEventListener('click', (e) => {
+            if (e.target === experienceWindow) {
+                closeExperienceWindow();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && experienceWindow && !experienceWindow.classList.contains('hidden')) {
+            closeExperienceWindow();
+        }
+    });
 
     const styleSheet = document.createElement("style");
     styleSheet.innerText = `
@@ -602,7 +795,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Initial render
             window.nextStep('password');
         });
+    }
 
+    if (mooClose && mooGame) {
         mooClose.addEventListener('click', () => {
             mooGame.classList.add('hidden');
             document.body.classList.remove('moo-theme');
