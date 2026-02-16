@@ -9,6 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const terminalContact = document.getElementById('terminal-contact');
     const terminalContactOutput = document.getElementById('terminal-contact-output');
     const terminalContactInput = document.getElementById('terminal-contact-input');
+    const blogPostLinks = document.querySelectorAll('.blog-post-link');
+    const blogTitle = document.getElementById('blog-viewer-title');
+    const blogMeta = document.getElementById('blog-viewer-meta');
+    const blogSummary = document.getElementById('blog-viewer-summary');
+    const blogPath = document.getElementById('blog-viewer-path');
+    const blogOpen = document.getElementById('blog-viewer-open');
+    const blogAddress = document.getElementById('blog-browser-address');
     const experienceWindow = document.getElementById('experience-window');
     const experienceWindowContent = document.getElementById('experience-window-content');
     const experienceWindowClose = document.getElementById('experience-window-close');
@@ -269,6 +276,33 @@ document.addEventListener('DOMContentLoaded', () => {
             terminalData[prompts[promptIndex].key] = value;
             promptIndex += 1;
             await promptNext();
+        });
+    }
+
+    // ==========================================
+    // Blog Browser Loader
+    // ==========================================
+    if (blogPostLinks.length && blogTitle && blogMeta && blogSummary && blogPath && blogOpen && blogAddress) {
+        const renderBlogPost = (button) => {
+            blogPostLinks.forEach((item) => item.classList.remove('active'));
+            button.classList.add('active');
+
+            const title = button.dataset.title || 'Untitled';
+            const date = button.dataset.date || '';
+            const summary = button.dataset.summary || '';
+            const source = button.dataset.source || '';
+            const slug = button.dataset.slug || '/blog/';
+
+            blogTitle.textContent = title;
+            blogMeta.textContent = date;
+            blogSummary.textContent = summary;
+            blogPath.innerHTML = `Source file: <code>${source}</code>`;
+            blogOpen.setAttribute('href', slug);
+            blogAddress.textContent = `blog://${slug.replace(/^\/+/, '').replace(/\/+$/, '') || 'blog'}`;
+        };
+
+        blogPostLinks.forEach((button) => {
+            button.addEventListener('click', () => renderBlogPost(button));
         });
     }
 

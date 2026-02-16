@@ -33,6 +33,9 @@
                     <a href="#experience" class="nav__link">Experience</a>
                 </li>
                 <li class="nav__item">
+                    <a href="#blog" class="nav__link">Blog</a>
+                </li>
+                <li class="nav__item">
                     <a href="#contact" class="nav__link">Contact</a>
                 </li>
 
@@ -318,6 +321,63 @@
                             </ul>
                         </div>
                     </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section class="blog section" id="blog">
+            <div class="container">
+                <span class="section__subtitle">Writing</span>
+                <h2 class="section__title">Blog <span class="gradient-text">Browser</span></h2>
+
+                <div class="blog-browser">
+                    <div class="blog-browser__chrome">
+                        <span class="blog-dot"></span>
+                        <span class="blog-dot"></span>
+                        <span class="blog-dot"></span>
+                        <span class="blog-browser__address" id="blog-browser-address">blog://welcome-to-the-blog</span>
+                    </div>
+
+                    <div class="blog-browser__body">
+                        <aside class="blog-browser__sidebar">
+                            <button class="blog-post-link active" data-title="Welcome to the Blog"
+                                data-date="February 16, 2026"
+                                data-summary="This is a placeholder post that will later be rendered by Jekyll."
+                                data-source="_posts/2026-02-16-welcome-to-the-blog.md"
+                                data-slug="/blog/2026/02/16/welcome-to-the-blog.html">
+                                Welcome to the Blog
+                            </button>
+                            <button class="blog-post-link" data-title="Coming Soon"
+                                data-date="TBD"
+                                data-summary="Future post slot. Add a new markdown file in _posts and it will appear here in your Jekyll flow."
+                                data-source="_posts/YYYY-MM-DD-your-post-title.md"
+                                data-slug="/blog/">
+                                AI Delivery Playbook (soon)
+                            </button>
+                            <button class="blog-post-link" data-title="Coming Soon"
+                                data-date="TBD"
+                                data-summary="Future post slot. This browser area is intentionally built to preview click-through behavior."
+                                data-source="_posts/YYYY-MM-DD-your-post-title.md"
+                                data-slug="/blog/">
+                                Responsible AI Notes (soon)
+                            </button>
+                        </aside>
+
+                        <article class="blog-browser__viewer">
+                            <p class="blog-viewer__meta" id="blog-viewer-meta">February 16, 2026</p>
+                            <h3 class="blog-viewer__title" id="blog-viewer-title">Welcome to the Blog</h3>
+                            <p class="blog-viewer__summary" id="blog-viewer-summary">
+                                This is a placeholder post that will later be rendered by Jekyll.
+                            </p>
+                            <p class="blog-viewer__path" id="blog-viewer-path">
+                                Source file: <code>_posts/2026-02-16-welcome-to-the-blog.md</code>
+                            </p>
+                            <a class="blog-viewer__open" id="blog-viewer-open" href="/blog/2026/02/16/welcome-to-the-blog.html">
+                                Open generated Jekyll post URL
+                            </a>
+                        </article>
+                    </div>
                 </div>
             </div>
         </section>

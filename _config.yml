@@ -1,0 +1,5 @@
+title: "Viggy.dev Blog"
+description: "A placeholder Jekyll blog"
+baseurl: ""
+url: "https://viggy.dev"
+theme: minima
