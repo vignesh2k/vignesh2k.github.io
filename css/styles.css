@@ -227,15 +227,17 @@ textarea {
     -webkit-text-fill-color: currentColor;
 }
 
-@keyframes gradientShift {
-    0%,
-    100% {
-        background-position: 0% 50%;
-    }
+/* Shared reveal animation (paired with IntersectionObserver in js/script.js) */
+.anim-on-scroll {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+    transition: opacity 700ms cubic-bezier(.2, .65, .2, 1), transform 700ms cubic-bezier(.2, .65, .2, 1);
+    will-change: opacity, transform;
+}
 
-    50% {
-        background-position: 100% 50%;
-    }
+.anim-on-scroll.in-view {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
 /* ============================================
@@ -652,36 +654,6 @@ textarea {
     border: 1px solid rgba(255, 255, 255, 0.7);
 }
 
-.avatar-placeholder {
-    font-family: var(--font-display);
-    font-size: var(--font-size-5xl);
-    color: var(--color-accent-1);
-}
-
-.hero__floating-elements {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-
-.floating-element {
-    position: absolute;
-    width: auto;
-    height: 34px;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-surface-border);
-    box-shadow: var(--shadow-sm);
-    font-size: 0.86rem;
-    animation: float 6s ease-in-out infinite;
-    backdrop-filter: blur(6px);
-    padding: 0 0.6rem;
-    font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
 .hero__facts {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -713,34 +685,6 @@ textarea {
     line-height: 1.35;
     color: var(--color-text-primary);
     font-weight: 600;
-}
-
-.floating-element--1 {
-    top: 12%;
-    left: 8%;
-}
-
-.floating-element--2 {
-    top: 20%;
-    right: 8%;
-    animation-delay: 1.2s;
-}
-
-.floating-element--3 {
-    bottom: 16%;
-    left: 18%;
-    animation-delay: 2.2s;
-}
-
-@keyframes float {
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
 }
 
 .hero__scroll {
@@ -792,7 +736,6 @@ textarea {
 
 .about__info,
 .about__skills,
-.contact__info,
 .contact__form {
     background: var(--color-surface);
     border: 1px solid var(--color-surface-border);
@@ -1190,142 +1133,10 @@ textarea {
     align-items: start;
 }
 
-.contact__info-title {
-    font-family: var(--font-display);
-    font-size: var(--font-size-2xl);
-    margin-bottom: var(--spacing-sm);
-}
-
-.contact__info-text {
-    color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-lg);
-}
-
-.contact__details {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
-}
-
-.contact__item {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-}
-
-.contact__icon {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-sm);
-    background: var(--color-bg-tertiary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.15rem;
-}
-
-.contact__label {
-    display: block;
-    font-size: var(--font-size-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text-muted);
-}
-
-.contact__value {
-    font-weight: 600;
-}
-
-.contact__value:hover {
-    color: var(--color-accent-1);
-}
-
-.contact__socials {
-    display: flex;
-    gap: var(--spacing-sm);
-}
-
-.social-link {
-    width: 42px;
-    height: 42px;
-    border-radius: var(--radius-full);
-    background: var(--color-bg-tertiary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-primary);
-    transition: all var(--transition-base);
-}
-
-.social-link:hover {
-    background: var(--color-accent-1);
-    color: #fff;
-    transform: translateY(-3px);
-}
-
-.social-link svg {
-    width: 18px;
-    height: 18px;
-}
-
-.moo-trigger-social {
-    font-size: 1.2rem;
-    text-decoration: none;
-}
-
 .contact__form {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-md);
-}
-
-.form__group {
-    position: relative;
-}
-
-.form__input {
-    width: 100%;
-    padding: 1.15rem 1rem 0.7rem;
-    border-radius: var(--radius-md);
-    border: 1.5px solid transparent;
-    background: var(--color-bg-tertiary);
-    color: var(--color-text-primary);
-    transition: all var(--transition-base);
-    outline: none;
-}
-
-.form__input:focus {
-    border-color: var(--color-accent-2);
-    background: var(--color-bg-secondary);
-}
-
-.form__label {
-    position: absolute;
-    top: 50%;
-    left: 1rem;
-    transform: translateY(-50%);
-    color: var(--color-text-muted);
-    pointer-events: none;
-    transition: all var(--transition-base);
-}
-
-.form__input:focus+.form__label,
-.form__input:not(:placeholder-shown)+.form__label {
-    top: 0.5rem;
-    transform: none;
-    font-size: var(--font-size-xs);
-    color: var(--color-accent-1);
-}
-
-.form__textarea {
-    min-height: 150px;
-    resize: vertical;
-}
-
-.form__textarea+.form__label {
-    top: 1rem;
-    transform: none;
 }
 
 /* ============================================
@@ -1418,23 +1229,6 @@ textarea {
     color: #000;
     text-decoration: underline;
     text-underline-offset: 2px;
-}
-
-.oldschool-link {
-    color: #0000ee;
-    text-decoration: underline;
-    text-underline-offset: 1px;
-    font-size: 0.85rem;
-    font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
-}
-
-.oldschool-link:visited {
-    color: #551a8b;
-}
-
-.oldschool-link:hover {
-    color: #0000ee;
-    text-decoration-thickness: 2px;
 }
 
 /* ============================================
@@ -1955,9 +1749,14 @@ body.moo-theme {
     .hero__blob,
     .hero__avatar,
     .hero__spotlight,
-    .floating-element,
     .scroll-indicator {
         animation: none !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    .anim-on-scroll {
+        opacity: 1 !important;
         transform: none !important;
         transition: none !important;
     }
@@ -2028,7 +1827,6 @@ body::after {
 .hero__title,
 .project-card__title,
 .about__skills-title,
-.contact__info-title,
 .footer__logo {
     font-family: var(--font-family);
     letter-spacing: 0;
@@ -2083,8 +1881,6 @@ body::after {
 .hero__description,
 .about__text,
 .project-card__description,
-.contact__info-text,
-.contact__label,
 .footer__text,
 .footer__copy {
     color: #111;
@@ -2098,7 +1894,6 @@ body::after {
 .stat,
 .skill-card,
 .project-card,
-.contact__info,
 .contact__form,
 .footer,
 .moo-card,
@@ -2118,15 +1913,8 @@ body::after {
 }
 
 .hero__spotlight,
-.hero__floating-elements,
 .hero__scroll {
     opacity: 0.4;
-}
-
-.floating-element {
-    background: #fff;
-    border: 1px solid #000;
-    color: #000;
 }
 
 .projects,
@@ -2144,8 +1932,6 @@ body::after {
     text-transform: lowercase;
 }
 
-.contact__icon,
-.social-link,
 .footer__back-to-top {
     border: 1px solid #000;
     background: #fff;
@@ -2153,26 +1939,9 @@ body::after {
     border-radius: 4px;
 }
 
-.social-link:hover,
 .footer__back-to-top:hover {
     background: #000;
     color: #fff;
-}
-
-.form__input {
-    background: #fff;
-    border: 1px solid #000;
-    color: #000;
-    border-radius: 4px;
-}
-
-.form__input:focus {
-    border-color: #000;
-    background: #fff;
-}
-
-.form__label {
-    color: #333;
 }
 
 .moo-overlay {

@@ -1,11 +1,11 @@
+// Core site interactions (navigation, terminal, blog browser, modals)
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
+    // DOM elements
     const header = document.getElementById('header');
     const navToggle = document.getElementById('nav-toggle');
     const navMenu = document.getElementById('nav-menu');
     const navLinks = document.querySelectorAll('.nav__link');
     const themeToggle = document.getElementById('theme-toggle');
-    const contactForm = document.getElementById('contact-form');
     const terminalContact = document.getElementById('terminal-contact');
     const terminalContactOutput = document.getElementById('terminal-contact-output');
     const terminalContactInput = document.getElementById('terminal-contact-input');
@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const experienceWindow = document.getElementById('experience-window');
     const experienceWindowContent = document.getElementById('experience-window-content');
     const experienceWindowClose = document.getElementById('experience-window-close');
-    const experienceSection = document.getElementById('experience');
 
     // State
     let isMenuOpen = false;
@@ -37,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mobile Menu Functionality
     // ==========================================
     function toggleMenu() {
+        if (!navToggle || !navMenu) return;
         isMenuOpen = !isMenuOpen;
         navToggle.classList.toggle('active');
         navMenu.classList.toggle('active');
@@ -46,13 +46,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function closeMenu() {
+        if (!navToggle || !navMenu) return;
         isMenuOpen = false;
         navToggle.classList.remove('active');
         navMenu.classList.remove('active');
         document.body.style.overflow = '';
     }
 
-    navToggle.addEventListener('click', toggleMenu);
+    if (navToggle) {
+        navToggle.addEventListener('click', toggleMenu);
+    }
 
     // Close menu when clicking a link
     navLinks.forEach(link => {
@@ -61,18 +64,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Close menu when clicking outside
     document.addEventListener('click', (e) => {
-        if (isMenuOpen && !navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+        if (isMenuOpen && navMenu && navToggle && !navMenu.contains(e.target) && !navToggle.contains(e.target)) {
             closeMenu();
         }
     });
 
     // ==========================================
-    // Header Scroll Effect
-    // ==========================================
-    // ==========================================
     // Optimized Scroll Handler (Throttled)
     // ==========================================
+    const sectionNavLinks = new Map(
+        Array.from(document.querySelectorAll('section[id]'))
+            .map((section) => {
+                const sectionId = section.getAttribute('id');
+                const link = sectionId ? document.querySelector(`.nav__link[href*="${sectionId}"]`) : null;
+                return sectionId && link ? [section, link] : null;
+            })
+            .filter(Boolean)
+    );
+
     function handleScroll() {
+        if (!header) return;
         if (window.scrollY > 50) {
             header.classList.add('scrolled');
         } else {
@@ -81,26 +92,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function activeLink() {
-        const sections = document.querySelectorAll('section[id]');
         const scrollY = window.pageYOffset;
 
-        sections.forEach(current => {
+        sectionNavLinks.forEach((link, current) => {
             const sectionHeight = current.offsetHeight;
             const sectionTop = current.offsetTop - 100;
-            const sectionId = current.getAttribute('id');
-            const sectionsClass = document.querySelector('.nav__menu a[href*=' + sectionId + ']'); // Note: This selector looks suspicious in original code (.nav__menu doesn't exist in HTML shown, it's .nav__list with id nav-menu), but keeping logic same for safety, just throttling.
-
-            // Actually, let's fix the caching if possible, but for now just throttle.
-            // The original code querySelector might return null if class doesn't match. 
-            // We'll trust the logic works as before but run it less often.
-
-            const link = document.querySelector('.nav__link[href*=' + sectionId + ']');
-            if (link) { // Safety check
-                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
+            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
             }
         });
     }
@@ -117,60 +117,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             ticking = true;
         }
-    });
+    }, { passive: true });
 
     // Initial check
     handleScroll();
     activeLink();
 
     // ==========================================
-    // Form Submission (Demo)
-    // ==========================================
-    if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            // Get form data
-            const formData = new FormData(contactForm);
-            const data = Object.fromEntries(formData);
-
-            // Simulate sending
-            const btn = contactForm.querySelector('button');
-            const originalText = btn.innerHTML;
-
-            btn.innerHTML = 'Sending...';
-            btn.disabled = true;
-
-            setTimeout(() => {
-                btn.innerHTML = `
-                    <span>Message Sent!</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                `;
-                btn.style.backgroundColor = 'var(--color-accent-1)';
-                contactForm.reset();
-
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                    btn.style.backgroundColor = '';
-                }, 3000);
-            }, 1500);
-        });
-    }
-
-    // ==========================================
     // Terminal Contact Flow
     // ==========================================
     if (terminalContact && terminalContactOutput && terminalContactInput) {
         const prompts = [
-            { key: 'name', text: 'Enter your name:' },
-            { key: 'email', text: 'Enter your email:' },
-            { key: 'message', text: 'Enter your message:' }
+            'Enter your name:',
+            'Enter your email:',
+            'Enter your message:'
         ];
 
-        const terminalData = {};
         let promptIndex = 0;
         let readyToSend = false;
         let sending = false;
@@ -206,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const promptNext = async () => {
             if (promptIndex < prompts.length) {
-                await typeLine(prompts[promptIndex].text, 'terminal-line--prompt');
+                await typeLine(prompts[promptIndex], 'terminal-line--prompt');
             } else {
                 readyToSend = true;
                 await typeLine('Hit RETURN to send.', 'terminal-line--prompt');
@@ -273,7 +235,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            terminalData[prompts[promptIndex].key] = value;
             promptIndex += 1;
             await promptNext();
         });
@@ -326,8 +287,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
-    // Add animated class to sections/cards
-    const elementsToReveal = document.querySelectorAll('.section__title, .about__text, .stat, .skill-card, .project-card, .contact__item, .contact__form');
+    // Add reveal classes only to elements present in the current layout.
+    const elementsToReveal = document.querySelectorAll('.section__title, .about__text, .stat, .skill-card, .project-card, .contact__form');
 
     elementsToReveal.forEach(el => {
         el.classList.add('anim-on-scroll');
@@ -380,10 +341,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const sourceCard = document.getElementById(targetId);
         if (!sourceCard) return;
 
-        if (experienceSection) {
-            experienceSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
         const clonedCard = sourceCard.cloneNode(true);
         clonedCard.removeAttribute('id');
         clonedCard.classList.remove('anim-on-scroll', 'in-view');
@@ -435,30 +392,6 @@ document.addEventListener('DOMContentLoaded', () => {
             closeExperienceWindow();
         }
     });
-
-    const styleSheet = document.createElement("style");
-    styleSheet.innerText = `
-        .anim-on-scroll {
-            opacity: 0;
-            transform: translateY(28px) scale(0.985);
-            transition: opacity 700ms cubic-bezier(.2,.65,.2,1), transform 700ms cubic-bezier(.2,.65,.2,1);
-            will-change: opacity, transform;
-        }
-        .anim-on-scroll.in-view {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }`;
-    if (prefersReducedMotion) {
-        styleSheet.innerText += `
-        .anim-on-scroll {
-            opacity: 1 !important;
-            transform: none !important;
-            transition: none !important;
-        }`;
-    }
-    styleSheet.innerText += `
-    `;
-    document.head.appendChild(styleSheet);
 });
 
 /* ============================================
@@ -467,6 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 1. OBFUSCATED Data
 const PUBLIC_OBFUSCATION_KEY = "MooMooKey";
+const MOO_PASSWORD_HASH = "7e08385fd26b116c84fdee726df8c7410dfd2de9f74867d599a9aace8513380c"; // sha256("moojeeb")
 const MOO_GAME_DATA = {
     "steps": {
         "password": {
@@ -598,18 +532,13 @@ async function hashAnswer(text) {
 
 // Helper to check answers
 async function checkAnswer(input, correct) {
-    // 1. Check Password Special Case
+    // Password gate uses a fixed hash for case-insensitive validation.
     if (currentStepId === 'password') {
-        const validHash = "7e08385fd26b116c84fdee726df8c7410dfd2de9f74867d599a9aace8513380c"; // sha256("moojeeb")
         const inputHash = await hashAnswer(input);
-
-        if (inputHash === validHash) {
-            return true;
-        }
-        return false;
+        return inputHash === MOO_PASSWORD_HASH;
     }
 
-    // Normal game flow validation
+    // Normal game flow validation.
     const inputHash = await hashAnswer(input);
     if (Array.isArray(correct)) {
         return correct.includes(inputHash);
@@ -676,9 +605,9 @@ function renderStep(stepId) {
     // Helper to get text content
     const getText = (str) => {
         if (!str) return '';
-        // Always decode XOR for text fields in this version
+        // All step copy is stored obfuscated and decoded on render.
         return decodeXor(str, PUBLIC_OBFUSCATION_KEY);
-    };// State for the game
+    };
 
     const title = getText(stepData.title);
     const text = getText(stepData.text);
@@ -742,7 +671,7 @@ function renderStep(stepId) {
         };
 
         btn.addEventListener('click', handleSubmit);
-        input.addEventListener('keypress', (e) => {
+        input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') handleSubmit();
         });
 
@@ -752,7 +681,7 @@ function renderStep(stepId) {
         const btns = container.querySelectorAll('.moo-options button');
         btns.forEach(btn => {
             btn.addEventListener('click', () => {
-                const idx = parseInt(btn.dataset.optIdx);
+                const idx = parseInt(btn.dataset.optIdx, 10);
                 const opt = stepData.options[idx];
                 if (opt.correct) {
                     if (opt.action === 'celebrate') {
@@ -817,20 +746,9 @@ function launchFireworks() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const mooTrigger = document.getElementById('moo-trigger');
+    // Bind close behavior for the Moo overlay regardless of how it was opened.
     const mooGame = document.getElementById('moo-game');
     const mooClose = document.getElementById('moo-close');
-
-    if (mooTrigger && mooGame) {
-        mooTrigger.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.body.classList.add('moo-theme');
-            mooGame.classList.remove('hidden');
-
-            // Initial render
-            window.nextStep('password');
-        });
-    }
 
     if (mooClose && mooGame) {
         mooClose.addEventListener('click', () => {
