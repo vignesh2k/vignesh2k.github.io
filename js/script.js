@@ -359,10 +359,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const updateScrollDepth = () => {
-        if (prefersReducedMotion) return;
         const y = window.scrollY || 0;
-        const heroShift = Math.min(y / 800, 1);
-        document.documentElement.style.setProperty('--scroll-depth', heroShift.toFixed(3));
+        if (!prefersReducedMotion) {
+            const heroShift = Math.min(y / 800, 1);
+            document.documentElement.style.setProperty('--scroll-depth', heroShift.toFixed(3));
+        }
     };
 
     window.addEventListener('scroll', updateScrollDepth, { passive: true });
