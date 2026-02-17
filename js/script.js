@@ -1,4 +1,4 @@
-// Core site interactions (navigation, terminal, blog browser, modals)
+// Core site interactions (navigation, terminal, Substack section, modals)
 document.addEventListener('DOMContentLoaded', () => {
     // DOM elements
     const header = document.getElementById('header');
@@ -9,13 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const terminalContact = document.getElementById('terminal-contact');
     const terminalContactOutput = document.getElementById('terminal-contact-output');
     const terminalContactInput = document.getElementById('terminal-contact-input');
-    const blogPostLinks = document.querySelectorAll('.blog-post-link');
-    const blogTitle = document.getElementById('blog-viewer-title');
-    const blogMeta = document.getElementById('blog-viewer-meta');
-    const blogSummary = document.getElementById('blog-viewer-summary');
-    const blogPath = document.getElementById('blog-viewer-path');
-    const blogOpen = document.getElementById('blog-viewer-open');
-    const blogAddress = document.getElementById('blog-browser-address');
+    const substackShell = document.querySelector('.substack-shell[data-substack-publication]');
+    const substackAddress = document.getElementById('substack-address');
+    const substackEmbed = document.getElementById('substack-embed');
+    const substackPublicationLink = document.getElementById('substack-publication-link');
+    const substackArchiveLink = document.getElementById('substack-archive-link');
+    const substackRssLink = document.getElementById('substack-rss-link');
+    const substackSetupNote = document.getElementById('substack-setup-note');
+    const substackFeaturedPosts = document.getElementById('substack-featured-posts');
     const experienceWindow = document.getElementById('experience-window');
     const experienceWindowContent = document.getElementById('experience-window-content');
     const experienceWindowClose = document.getElementById('experience-window-close');
@@ -241,30 +242,313 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // Blog Browser Loader
+    // Substack Wiring
     // ==========================================
-    if (blogPostLinks.length && blogTitle && blogMeta && blogSummary && blogPath && blogOpen && blogAddress) {
-        const renderBlogPost = (button) => {
-            blogPostLinks.forEach((item) => item.classList.remove('active'));
-            button.classList.add('active');
+    if (substackShell) {
+        const publicationUrl = (substackShell.dataset.substackPublication || '').trim().replace(/\/+$/, '');
+        const isConfigured = publicationUrl && !publicationUrl.includes('YOUR_PUBLICATION');
+        const updateLink = (linkEl, href) => {
+            if (!linkEl) return;
+            linkEl.setAttribute('href', href);
+            linkEl.classList.remove('substack-shell__link--disabled');
+            linkEl.removeAttribute('aria-disabled');
+        };
+        const decodeHtmlEntities = (raw) => {
+            if (!raw) return '';
+            let decoded = raw;
+            for (let pass = 0; pass < 3; pass += 1) {
+                const parser = document.createElement('textarea');
+                parser.innerHTML = decoded;
+                if (parser.value === decoded) break;
+                decoded = parser.value;
+            }
+            return decoded;
+        };
+        const stripHtml = (raw) => {
+            if (!raw) return '';
+            const withoutTags = raw.replace(/<[^>]+>/g, ' ');
+            return decodeHtmlEntities(withoutTags).replace(/\s+/g, ' ').trim();
+        };
+        const firstAvailable = (...values) => {
+            for (const value of values) {
+                if (value === 0) return value;
+                if (value === null || value === undefined) continue;
+                if (typeof value === 'string' && value.trim()) return value.trim();
+                if (typeof value === 'number' && Number.isFinite(value)) return value;
+            }
+            return '';
+        };
+        const extractFeedImage = (itemNode, parsedDescriptionDoc) => {
+            if (!itemNode) {
+                return parsedDescriptionDoc?.querySelector('img')?.getAttribute('src') || '';
+            }
 
-            const title = button.dataset.title || 'Untitled';
-            const date = button.dataset.date || '';
-            const summary = button.dataset.summary || '';
-            const source = button.dataset.source || '';
-            const slug = button.dataset.slug || '/blog/';
+            const mediaContent = itemNode.getElementsByTagName('media:content')[0];
+            if (mediaContent?.getAttribute('url')) {
+                return mediaContent.getAttribute('url');
+            }
 
-            blogTitle.textContent = title;
-            blogMeta.textContent = date;
-            blogSummary.textContent = summary;
-            blogPath.innerHTML = `Source file: <code>${source}</code>`;
-            blogOpen.setAttribute('href', slug);
-            blogAddress.textContent = `blog://${slug.replace(/^\/+/, '').replace(/\/+$/, '') || 'blog'}`;
+            const enclosure = itemNode.querySelector('enclosure');
+            const enclosureType = enclosure?.getAttribute('type') || '';
+            if (enclosure?.getAttribute('url') && enclosureType.startsWith('image/')) {
+                return enclosure.getAttribute('url');
+            }
+
+            const contentEncoded = itemNode.getElementsByTagName('content:encoded')[0]?.textContent || '';
+            const description = itemNode.querySelector('description')?.textContent || '';
+            const html = contentEncoded || description;
+            if (!html) return '';
+
+            const parsedHtml = new DOMParser().parseFromString(html, 'text/html');
+            return parsedHtml.querySelector('img')?.getAttribute('src') || '';
+        };
+        const createFeaturedCard = ({ title, subtitle, href, image }) => {
+            const card = document.createElement('article');
+            card.className = 'substack-featured__card';
+            const cardLink = document.createElement('a');
+            cardLink.className = 'substack-featured__card-link';
+            cardLink.href = href;
+            cardLink.target = '_blank';
+            cardLink.rel = 'noopener noreferrer';
+
+            const media = document.createElement('div');
+            media.className = 'substack-featured__media';
+
+            if (image) {
+                const cardImage = document.createElement('img');
+                cardImage.className = 'substack-featured__image';
+                cardImage.src = image;
+                cardImage.alt = title ? `${title} cover image` : 'Substack post cover image';
+                cardImage.loading = 'lazy';
+                media.appendChild(cardImage);
+            } else {
+                const mediaPlaceholder = document.createElement('span');
+                mediaPlaceholder.className = 'substack-featured__image-placeholder';
+                mediaPlaceholder.textContent = 'No cover image';
+                media.appendChild(mediaPlaceholder);
+            }
+
+            const cardTitle = document.createElement('h4');
+            cardTitle.className = 'substack-featured__title';
+            cardTitle.textContent = title;
+
+            cardLink.append(media, cardTitle);
+            if (subtitle) {
+                const cardSubtitle = document.createElement('p');
+                cardSubtitle.className = 'substack-featured__subtitle';
+                cardSubtitle.textContent = subtitle;
+                cardLink.appendChild(cardSubtitle);
+            }
+            card.append(cardLink);
+            return card;
+        };
+        const renderFeaturedFallback = (feedUnavailable = false) => {
+            if (!substackFeaturedPosts) return;
+            substackFeaturedPosts.innerHTML = '';
+            const fallbackCards = [
+                {
+                    title: 'Latest from the archive',
+                    subtitle: 'Browse all published essays and updates.',
+                    href: `${publicationUrl}/archive`,
+                    image: ''
+                },
+                {
+                    title: 'Subscribe to new posts',
+                    subtitle: 'Get new writing directly to your inbox.',
+                    href: `${publicationUrl}`,
+                    image: ''
+                },
+                {
+                    title: 'Follow via RSS',
+                    subtitle: 'Track posts from your preferred RSS reader.',
+                    href: `${publicationUrl}/feed`,
+                    image: ''
+                }
+            ];
+            fallbackCards.forEach((cardData) => {
+                substackFeaturedPosts.appendChild(createFeaturedCard(cardData));
+            });
+            if (substackSetupNote && feedUnavailable) {
+                substackSetupNote.textContent = 'Substack connected. Feed preview is unavailable right now, so quick links are shown.';
+            }
+        };
+        const fetchArchivePosts = async () => {
+            // Preferred path: Substack archive endpoint (typically includes cover images).
+            const response = await fetch(`${publicationUrl}/api/v1/archive?sort=new`);
+            if (!response.ok) {
+                throw new Error('Archive endpoint unavailable.');
+            }
+
+            const payload = await response.json();
+            const entries = Array.isArray(payload)
+                ? payload
+                : Array.isArray(payload?.posts)
+                    ? payload.posts
+                    : Array.isArray(payload?.items)
+                        ? payload.items
+                        : [];
+
+            return entries.slice(0, 3).map((entry) => {
+                const title = firstAvailable(entry?.title, entry?.social_title, 'Untitled post');
+                const subtitleSource = firstAvailable(entry?.subtitle, entry?.post_abstract, entry?.description, '');
+                const subtitle = stripHtml(subtitleSource).slice(0, 120);
+                const href = firstAvailable(entry?.canonical_url, entry?.url, entry?.post_url, publicationUrl);
+                const image = firstAvailable(entry?.cover_image, entry?.cover_image_url, entry?.hero_image, entry?.preview_image);
+
+                return { title, subtitle, href, image };
+            });
+        };
+        const fetchRssPosts = async () => {
+            const feedXml = await fetchFeedXml();
+            const feedDoc = new DOMParser().parseFromString(feedXml, 'application/xml');
+            const postItems = Array.from(feedDoc.querySelectorAll('item, entry')).slice(0, 3);
+
+            return postItems.map((item) => {
+                const title = firstAvailable(item.querySelector('title')?.textContent, 'Untitled post');
+                const atomLinkEl = Array.from(item.querySelectorAll('link')).find((link) => link.getAttribute('href'));
+                const href = firstAvailable(
+                    atomLinkEl?.getAttribute('href'),
+                    item.querySelector('link')?.textContent,
+                    publicationUrl
+                );
+                const summaryRaw = firstAvailable(
+                    item.getElementsByTagName('itunes:subtitle')[0]?.textContent,
+                    item.getElementsByTagName('content:encoded')[0]?.textContent,
+                    item.querySelector('description')?.textContent,
+                    item.querySelector('content')?.textContent,
+                    item.querySelector('summary')?.textContent,
+                    'Read this post on Substack.'
+                );
+                const summaryDoc = new DOMParser().parseFromString(summaryRaw || '', 'text/html');
+                const subtitle = stripHtml(summaryRaw).slice(0, 120);
+                const image = extractFeedImage(item, summaryDoc);
+
+                return { title, subtitle, href, image };
+            });
+        };
+        const fetchFeedXml = async () => {
+            const feedUrl = `${publicationUrl}/feed`;
+            const proxyCandidates = [
+                `https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`,
+                `https://corsproxy.io/?${encodeURIComponent(feedUrl)}`
+            ];
+
+            try {
+                const directResponse = await fetch(feedUrl);
+                if (directResponse.ok) {
+                    return await directResponse.text();
+                }
+            } catch (directError) {
+                // Continue to proxy fallback.
+            }
+
+            for (const proxyUrl of proxyCandidates) {
+                try {
+                    const proxiedResponse = await fetch(proxyUrl);
+                    if (proxiedResponse.ok) {
+                        return await proxiedResponse.text();
+                    }
+                } catch (proxyError) {
+                    // Continue to next proxy.
+                }
+            }
+
+            throw new Error('Feed proxy request failed.');
+        };
+        const fetchRss2JsonPosts = async () => {
+            const feedUrl = `${publicationUrl}/feed`;
+            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`);
+            if (!response.ok) {
+                throw new Error('rss2json request failed.');
+            }
+
+            const payload = await response.json();
+            const items = Array.isArray(payload?.items) ? payload.items.slice(0, 3) : [];
+            if (!items.length) {
+                throw new Error('rss2json returned no posts.');
+            }
+
+            return items.map((item) => {
+                const title = firstAvailable(item?.title, 'Untitled post');
+                const href = firstAvailable(item?.link, publicationUrl);
+                const subtitleRaw = firstAvailable(
+                    item?.subtitle,
+                    item?.description,
+                    item?.content,
+                    item?.content_encoded,
+                    'Read this post on Substack.'
+                );
+                const subtitle = stripHtml(subtitleRaw).slice(0, 120);
+                const image = firstAvailable(
+                    item?.thumbnail,
+                    item?.enclosure?.link,
+                    item?.enclosure?.url,
+                    ''
+                );
+
+                return { title, subtitle, href, image };
+            });
+        };
+        const loadFeaturedPosts = async () => {
+            if (!substackFeaturedPosts) return;
+
+            try {
+                let featuredPosts = [];
+
+                try {
+                    featuredPosts = await fetchArchivePosts();
+                } catch (archiveError) {
+                    try {
+                        featuredPosts = await fetchRssPosts();
+                    } catch (rssError) {
+                        featuredPosts = await fetchRss2JsonPosts();
+                    }
+                }
+
+                if (!featuredPosts.length) throw new Error('No posts available.');
+
+                substackFeaturedPosts.innerHTML = '';
+                featuredPosts.forEach((post) => {
+                    substackFeaturedPosts.appendChild(createFeaturedCard(post));
+                });
+            } catch (error) {
+                renderFeaturedFallback(true);
+            }
         };
 
-        blogPostLinks.forEach((button) => {
-            button.addEventListener('click', () => renderBlogPost(button));
-        });
+        if (isConfigured) {
+            if (substackAddress) {
+                substackAddress.textContent = `substack://${publicationUrl.replace(/^https?:\/\//, '')}`;
+            }
+            if (substackEmbed) {
+                substackEmbed.setAttribute('src', `${publicationUrl}/embed`);
+                substackEmbed.classList.remove('substack-shell__embed--hidden');
+            }
+            updateLink(substackPublicationLink, publicationUrl);
+            updateLink(substackArchiveLink, `${publicationUrl}/archive`);
+            updateLink(substackRssLink, `${publicationUrl}/feed`);
+            if (substackSetupNote) {
+                substackSetupNote.textContent = 'Live Substack integration enabled.';
+            }
+            loadFeaturedPosts();
+        } else {
+            if (substackAddress) {
+                substackAddress.textContent = 'substack://configure-publication-url';
+            }
+            if (substackEmbed) {
+                substackEmbed.removeAttribute('src');
+                substackEmbed.classList.add('substack-shell__embed--hidden');
+            }
+            [substackPublicationLink, substackArchiveLink, substackRssLink].forEach((linkEl) => {
+                if (!linkEl) return;
+                linkEl.removeAttribute('href');
+                linkEl.setAttribute('aria-disabled', 'true');
+                linkEl.classList.add('substack-shell__link--disabled');
+            });
+            if (substackFeaturedPosts) {
+                substackFeaturedPosts.innerHTML = '<p class="substack-featured__loading">Add your Substack URL to load featured posts.</p>';
+            }
+        }
     }
 
     // ==========================================

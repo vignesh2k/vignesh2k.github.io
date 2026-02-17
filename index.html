@@ -328,50 +328,43 @@
         <section class="blog section" id="blog">
             <div class="container">
                 <span class="section__subtitle">Writing</span>
-                <h2 class="section__title">Blog <span class="gradient-text">Browser</span></h2>
+                <h2 class="section__title">Substack <span class="gradient-text">Journal</span></h2>
 
-                <div class="blog-browser">
-                    <div class="blog-browser__chrome">
+                <div class="substack-shell" data-substack-publication="https://viggy384322.substack.com">
+                    <div class="substack-shell__chrome">
                         <span class="blog-dot"></span>
                         <span class="blog-dot"></span>
                         <span class="blog-dot"></span>
-                        <span class="blog-browser__address" id="blog-browser-address">blog://welcome-to-the-blog</span>
+                        <span class="substack-shell__address" id="substack-address">substack://your-publication</span>
                     </div>
 
-                    <div class="blog-browser__body">
-                        <aside class="blog-browser__sidebar">
-                            <button class="blog-post-link active" data-title="Welcome to the Blog"
-                                data-date="February 16, 2026"
-                                data-summary="This is a placeholder post that will later be rendered by Jekyll."
-                                data-source="_posts/2026-02-16-welcome-to-the-blog.md"
-                                data-slug="/blog/2026/02/16/welcome-to-the-blog.html">
-                                Welcome to the Blog
-                            </button>
-                            <button class="blog-post-link" data-title="Coming Soon" data-date="TBD"
-                                data-summary="Future post slot. Add a new markdown file in _posts and it will appear here in your Jekyll flow."
-                                data-source="_posts/YYYY-MM-DD-your-post-title.md" data-slug="/blog/">
-                                AI Delivery Playbook (soon)
-                            </button>
-                            <button class="blog-post-link" data-title="Coming Soon" data-date="TBD"
-                                data-summary="Future post slot. This browser area is intentionally built to preview click-through behavior."
-                                data-source="_posts/YYYY-MM-DD-your-post-title.md" data-slug="/blog/">
-                                Responsible AI Notes (soon)
-                            </button>
+                    <div class="substack-shell__body">
+                        <aside class="substack-shell__panel">
+                            <h3 class="substack-shell__panel-title">Subscribe</h3>
+                            <p class="substack-shell__panel-text">
+                                Join for practical notes on AI strategy, innovation delivery, and execution.
+                            </p>
+                            <iframe id="substack-embed" class="substack-shell__embed"
+                                title="Substack subscribe form"></iframe>
                         </aside>
 
-                        <article class="blog-browser__viewer">
-                            <p class="blog-viewer__meta" id="blog-viewer-meta">February 16, 2026</p>
-                            <h3 class="blog-viewer__title" id="blog-viewer-title">Welcome to the Blog</h3>
-                            <p class="blog-viewer__summary" id="blog-viewer-summary">
-                                This is a placeholder post that will later be rendered by Jekyll.
+                        <article class="substack-shell__content">
+                            <p class="substack-shell__eyebrow">publication links</p>
+                            <div class="substack-shell__links">
+                                <a id="substack-publication-link" class="substack-shell__link" target="_blank"
+                                    rel="noopener noreferrer">Open publication</a>
+                                <a id="substack-archive-link" class="substack-shell__link" target="_blank"
+                                    rel="noopener noreferrer">View archive</a>
+                                <a id="substack-rss-link" class="substack-shell__link" target="_blank"
+                                    rel="noopener noreferrer">RSS feed</a>
+                            </div>
+                            <p class="substack-shell__note" id="substack-setup-note">
+                                Live Substack integration enabled.
                             </p>
-                            <p class="blog-viewer__path" id="blog-viewer-path">
-                                Source file: <code>_posts/2026-02-16-welcome-to-the-blog.md</code>
-                            </p>
-                            <a class="blog-viewer__open" id="blog-viewer-open"
-                                href="/blog/2026/02/16/welcome-to-the-blog.html">
-                                Open generated Jekyll post URL
-                            </a>
+                            <p class="substack-shell__eyebrow">featured posts</p>
+                            <div class="substack-featured" id="substack-featured-posts" aria-live="polite">
+                                <p class="substack-featured__loading">Loading featured posts...</p>
+                            </div>
                         </article>
                     </div>
                 </div>
